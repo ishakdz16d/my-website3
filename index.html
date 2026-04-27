@@ -1,7 +1,105 @@
 <!DOCTYPE html>
-<html>
-<head><title>OK</title></head>
-<body style="background:black;color:white;text-align:center;padding-top:100px;">
-<h1>الموقع شغال 🔥</h1>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>موقعي الهادئ</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+
+      /* صورة الخلفية */
+      background-image: url("https://chatgpt.com/backend-api/estuary/content?id=file_0000000067e471f5bda57312072725e8");
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      overflow: hidden;
+      color: white;
+    }
+
+    .overlay {
+      background: rgba(0,0,0,0.65);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 12px 28px;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background: #00c2ff;
+      color: white;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #0096c7;
+      transform: scale(1.05);
+    }
+
+    .card {
+      margin-top: 30px;
+      padding: 15px 25px;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 15px;
+      backdrop-filter: blur(5px);
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="overlay">
+
+  <h1>🌙 مرحبا بك</h1>
+  <p>موقع بسيط مع موسيقى هادئة وخلفية جميلة</p>
+
+  <button onclick="toggleMusic()">▶ تشغيل / إيقاف الموسيقى</button>
+
+  <div class="card">
+    هذا موقع يمكنك رفعه مباشرة على GitHub Pages 🚀
+  </div>
+
+</div>
+
+<!-- موسيقى هادئة -->
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9b3b3b7f3a.mp3?filename=calm-lofi-ambient-112191.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const music = document.getElementById("music");
+  let playing = false;
+
+  function toggleMusic() {
+    if (!playing) {
+      music.play();
+      playing = true;
+    } else {
+      music.pause();
+      playing = false;
+    }
+  }
+</script>
+
 </body>
 </html>
