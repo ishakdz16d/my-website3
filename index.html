@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>اسحاق | Portfolio</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif;}
 
@@ -12,6 +14,32 @@ body{
 background:#05060a;
 color:#fff;
 overflow-x:hidden;
+}
+
+/* النجوم */
+.stars{
+position:fixed;
+width:100%;
+height:100%;
+top:0;
+left:0;
+z-index:0;
+overflow:hidden;
+}
+
+.star{
+position:absolute;
+width:2px;
+height:2px;
+background:white;
+border-radius:50%;
+opacity:0.5;
+animation:moveStars linear infinite;
+}
+
+@keyframes moveStars{
+from{transform:translateY(0);}
+to{transform:translateY(100vh);}
 }
 
 /* الخلفية */
@@ -51,6 +79,14 @@ background:linear-gradient(135deg,#7c3aed,#4f46e5);
 padding:10px 18px;
 border-radius:12px;
 font-size:14px;
+cursor:pointer;
+}
+
+.btn-outline{
+border:1px solid #7c3aed;
+padding:10px 15px;
+border-radius:12px;
+cursor:pointer;
 }
 
 /* HERO */
@@ -87,13 +123,7 @@ gap:15px;
 margin-top:25px;
 }
 
-.btn-outline{
-border:1px solid #7c3aed;
-padding:10px 15px;
-border-radius:12px;
-}
-
-/* PROFILE CARD */
+/* CARD */
 .card{
 background:rgba(255,255,255,0.05);
 border:1px solid rgba(255,255,255,0.08);
@@ -127,7 +157,6 @@ display:inline-block;
 margin-left:5px;
 }
 
-/* SOCIAL */
 .social{
 margin-top:20px;
 display:flex;
@@ -144,24 +173,6 @@ border-radius:12px;
 font-size:13px;
 }
 
-/* STATS */
-.stats{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:15px;
-padding:30px 70px;
-}
-
-.stat{
-background:rgba(255,255,255,0.05);
-border:1px solid rgba(255,255,255,0.08);
-padding:20px;
-border-radius:18px;
-text-align:center;
-}
-
-.stat h2{color:#a78bfa;}
-
 /* ABOUT */
 .about{
 display:grid;
@@ -177,73 +188,85 @@ border-radius:20px;
 opacity:.9;
 }
 
-/* SKILLS */
-.skills{
+/* PROJECTS */
+.projects{
+padding:60px 70px;
+position:relative;
+z-index:2;
+}
+
+.section-title{
+font-size:28px;
+margin-bottom:25px;
+}
+
+.projects-grid{
 display:grid;
-grid-template-columns:repeat(5,1fr);
-gap:15px;
-padding:40px 70px;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
 }
 
-.skill{
+.project-card{
 background:rgba(255,255,255,0.05);
-padding:15px;
-border-radius:15px;
-text-align:center;
 border:1px solid rgba(255,255,255,0.08);
+border-radius:20px;
+padding:20px;
+transition:0.3s;
+backdrop-filter:blur(10px);
 }
 
-.skill-bar{
-height:4px;
-background:#1f2937;
-border-radius:10px;
-margin-top:10px;
-overflow:hidden;
+.project-card:hover{
+transform:translateY(-8px);
+border-color:#7c3aed;
+box-shadow:0 10px 30px rgba(124,58,237,0.2);
 }
 
-.skill-bar div{
-height:100%;
-background:linear-gradient(90deg,#7c3aed,#60a5fa);
+.project-img{
+height:140px;
+border-radius:15px;
+background:linear-gradient(135deg,#7c3aed,#60a5fa);
+margin-bottom:15px;
+}
+
+.project-card h3{
+margin-bottom:10px;
+font-size:18px;
+}
+
+.project-card p{
+font-size:13px;
+opacity:0.7;
+margin-bottom:15px;
+}
+
+.project-card a{
+color:#a78bfa;
+text-decoration:none;
+font-size:13px;
 }
 
 /* MUSIC */
-.music{
-position:fixed;
-bottom:20px;
-left:20px;
-background:rgba(17,24,39,0.9);
-padding:10px 15px;
-border-radius:12px;
-border:1px solid #7c3aed;
-z-index:100;
-}
-
-button{
-background:#7c3aed;
-border:none;
-padding:6px 10px;
-color:white;
-border-radius:8px;
-cursor:pointer;
+audio{
+display:none;
 }
 
 @media(max-width:900px){
 .hero,.about{grid-template-columns:1fr;}
-.stats,.skills{grid-template-columns:1fr 1fr;}
 nav{padding:20px;}
 .hero{padding:20px;}
 }
 </style>
 </head>
+
 <body>
 
+<div class="stars" id="stars"></div>
 <div class="bg-glow"></div>
 
 <nav>
 <h3>اسحاق</h3>
 <ul>
 <li>الرئيسية</li>
-<li>المهارات</li>
 <li>المشاريع</li>
 <li>تواصل</li>
 </ul>
@@ -262,7 +285,9 @@ nav{padding:20px;}
 </div>
 
 <div class="card">
-<img class="profile-img" src="https://i.imgur.com/8Km9tLL.jpg">
+<img class="profile-img"
+src="https://cdn.discordapp.com/avatars/1200879352875864134/f8dcf7c4b6cef83644eb44beed2fabf3.webp?size=256">
+
 <h3 style="margin-top:10px;">اسحاق</h3>
 <div class="status">Frontend Developer <span class="dot"></span></div>
 
@@ -273,42 +298,67 @@ nav{padding:20px;}
 </div>
 </section>
 
-<section class="stats">
-<div class="stat"><h2>10+</h2><p>مشاريع</p></div>
-<div class="stat"><h2>200+</h2><p>ساعات</p></div>
-<div class="stat"><h2>1+</h2><p>سنة خبرة</p></div>
-<div class="stat"><h2>100%</h2><p>شغف</p></div>
-</section>
-
 <section class="about">
 <div>
 <h2>من أنا؟</h2>
 <p>أنا مطور واجهات متخصص في بناء مواقع حديثة سريعة ومتجاوبة بتصميم احترافي وتجربة مستخدم عالية.</p>
 </div>
+
 <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085">
 </section>
 
-<section class="skills">
-<div class="skill">HTML<div class="skill-bar"><div style="width:90%"></div></div></div>
-<div class="skill">CSS<div class="skill-bar"><div style="width:85%"></div></div></div>
-<div class="skill">JS<div class="skill-bar"><div style="width:70%"></div></div></div>
-<div class="skill">Git<div class="skill-bar"><div style="width:75%"></div></div></div>
-<div class="skill">Responsive<div class="skill-bar"><div style="width:90%"></div></div></div>
-</section>
+<!-- PROJECTS -->
+<section class="projects">
+<h2 class="section-title">مشاريعي</h2>
 
-<div class="music">
-🎵 موسيقى
-<button onclick="toggleMusic()">تشغيل</button>
-<audio id="bg" loop>
-<source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_c8b3d3d2d1.mp3">
-</audio>
+<div class="projects-grid">
+
+<div class="project-card">
+<div class="project-img"></div>
+<h3>موقع متجر إلكتروني</h3>
+<p>تصميم متجر حديث متجاوب مع تجربة مستخدم ممتازة.</p>
+<a href="#">عرض المشروع</a>
 </div>
 
+<div class="project-card">
+<div class="project-img"></div>
+<h3>بورتفوليو شخصي</h3>
+<p>موقع شخصي بتصميم عصري مع تأثيرات جميلة.</p>
+<a href="#">عرض المشروع</a>
+</div>
+
+<div class="project-card">
+<div class="project-img"></div>
+<h3>Dashboard لوحة تحكم</h3>
+<p>واجهة إدارة بيانات احترافية وسهلة الاستخدام.</p>
+<a href="#">عرض المشروع</a>
+</div>
+
+</div>
+</section>
+
+<!-- MUSIC -->
+<audio id="bg" autoplay loop>
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8b3d3d2d1.mp3">
+</audio>
+
 <script>
-function toggleMusic(){
-const a=document.getElementById('bg');
-if(a.paused)a.play();else a.pause();
+// نجوم
+for(let i=0;i<80;i++){
+const star=document.createElement("div");
+star.className="star";
+star.style.left=Math.random()*100+"vw";
+star.style.top=Math.random()*-100+"vh";
+star.style.animationDuration=(Math.random()*5+3)+"s";
+document.getElementById("stars").appendChild(star);
 }
+
+// موسيقى
+const audio=document.getElementById("bg");
+window.addEventListener("load",()=>{
+audio.volume=0.4;
+audio.play().catch(()=>{});
+});
 </script>
 
 </body>
