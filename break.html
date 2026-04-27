@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Break Game</title>
+
+<style>
+body{
+margin:0;
+background:black;
+overflow:hidden;
+}
+
+canvas{
+display:block;
+}
+
+button{
+position:fixed;
+top:10px;
+right:10px;
+padding:10px;
+background:#00c2ff;
+border:none;
+color:white;
+border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<button onclick="location.href='games.html'">⬅ خروج</button>
+
+<canvas id="c"></canvas>
+
+<script>
+
+const canvas=document.getElementById("c");
+const ctx=canvas.getContext("2d");
+
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+let paddle={
+x:canvas.width/2,
+y:canvas.height-50,
+w:100,
+h:10
+};
+
+let ball={
+x:canvas.width/2,
+y:canvas.height/2,
+vx:4,
+vy:4,
+r:10
+};
+
+let blocks=[];
+
+/* بناء البلوكات */
+for(let i=0;i<6;i++){
+for(let j=0;j<10;j++){
+blocks.push({
+x: j*70,
+y: i*30,
+w:60,
+h:20
+});
+}
+}
+
+window.addEventListener("mousemove",e=>{
+paddle.x=e.clientX;
+});
+
+function loop(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+/* paddle */
+ctx.fillStyle="#00c2ff";
+ctx.fillRect(paddle.x,paddle.y,paddle.w,paddle.h);
+
+/* ball */
+ball.x+=ball.vx;
+ball.y+=ball.vy;
+
+ctx.fillStyle="white";
+ctx.beginPath();
+ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);
+ctx.fill();
+
+/* bounce */
+if(ball.x<0||ball.x>canvas.width) ball.vx*=-1;
+if(ball.y<0) ball.vy*=-1;
+
+/* paddle hit */
+if(ball.y>paddle.y-10 && ball.x>paddle.x && ball.x<paddle.x+paddle.w){
+ball.vy*=-1;
+}
+
+/* blocks */
+for(let i=blocks.length-1;i>=0;i--){
+let b=blocks[i];
+
+ctx.fillStyle="red";
+ctx.fillRect(b.x,b.y,b.w,b.h);
+
+if(ball.x>b.x && ball.x<b.x+b.w && ball.y>b.y && ball.y<b.y+b.h){
+blocks.splice(i,1);
+ball.vy*=-1;
+}
+}
+
+/* lose */
+if(ball.y>canvas.height){
+alert("Game Over");
+location.reload();
+}
+
+requestAnimationFrame(loop);
+}
+
+loop();
+
+</script>
+
+</body>
+</html>
