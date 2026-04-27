@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Is7aq Profile</title>
+<title>Game Hub Fixed</title>
 
 <style>
 body{
 margin:0;
-font-family:Arial;
 background:black;
-color:white;
 overflow:hidden;
+font-family:Arial;
+color:white;
 }
 
 canvas{
@@ -20,83 +20,146 @@ top:0;
 left:0;
 }
 
-.card{
+.menu{
 position:absolute;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
-background:rgba(255,255,255,0.06);
-border:1px solid #00c2ff;
-padding:20px;
-border-radius:20px;
-width:90%;
-max-width:360px;
 text-align:center;
-backdrop-filter:blur(10px);
 }
 
 button{
-width:100%;
-margin-top:10px;
-padding:12px;
+width:200px;
+margin:5px;
+padding:10px;
 border:none;
-border-radius:12px;
+border-radius:10px;
 background:#00c2ff;
 color:white;
-cursor:pointer;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="bg"></canvas>
+<canvas id="game"></canvas>
 
-<div class="card">
-<h2>👨‍💻 اسحاق</h2>
-<p>🇩🇿 من الجزائر</p>
-<p>💻 أحب البرمجة وصناعة المواقع</p>
+<div class="menu" id="menu">
+<h2>🎮 Game Hub</h2>
 
-<button onclick="openDiscord()">💬 Discord</button>
-<button onclick="openInstagram()">📸 Instagram</button>
+<button onclick="start('snake')">🐍 Snake</button>
+<button onclick="start('break')">🧱 Break</button>
+<button onclick="start('space')">🚀 Space</button>
 
-<button onclick="goGames()">🎮 دخول الألعاب</button>
 </div>
 
 <script>
 
-/* روابط */
-function openDiscord(){
-window.open("https://discord.com/users/is7_9","_blank");
+const c=document.getElementById("game");
+const ctx=c.getContext("2d");
+
+c.width=innerWidth;
+c.height=innerHeight;
+
+let mode="menu";
+
+/* التحكم */
+let x=c.width/2;
+
+/* ---------- MENU ---------- */
+function start(g){
+document.getElementById("menu").style.display="none";
+mode=g;
 }
 
-function openInstagram(){
-window.open("https://instagram.com/dz16d","_blank");
-}
+/* ---------- SNAKE ---------- */
+let snake=[{x:100,y:100}];
+let dir="RIGHT";
 
-function goGames(){
-window.location.href="games.html";
-}
+window.addEventListener("keydown",e=>{
+if(e.key==="ArrowRight")dir="RIGHT";
+if(e.key==="ArrowLeft")dir="LEFT";
+if(e.key==="ArrowUp")dir="UP";
+if(e.key==="ArrowDown")dir="DOWN";
+});
 
-/* نجوم */
-const bg=document.getElementById("bg");
-const ctx=bg.getContext("2d");
+function snakeGame(){
 
-bg.width=innerWidth;
-bg.height=innerHeight;
+let head={...snake[0]};
 
-let stars=[];
-for(let i=0;i<120;i++){
-stars.push({x:Math.random()*bg.width,y:Math.random()*bg.height});
-}
+if(dir==="RIGHT")head.x+=20;
+if(dir==="LEFT")head.x-=20;
+if(dir==="UP")head.y-=20;
+if(dir==="DOWN")head.y+=20;
 
-function draw(){
-ctx.clearRect(0,0,bg.width,bg.height);
+snake.unshift(head);
+snake.pop();
+
+for(let i=0;i<snake.length;i++){
 ctx.fillStyle="white";
-stars.forEach(s=>ctx.fillRect(s.x,s.y,1.5,1.5));
+ctx.fillRect(snake[i].x,snake[i].y,20,20);
+}
 }
 
-setInterval(draw,50);
+/* ---------- BREAK ---------- */
+let ball={x:200,y:200,vx:4,vy:4};
+
+function breakGame(){
+
+ball.x+=ball.vx;
+ball.y+=ball.vy;
+
+if(ball.x<0||ball.x>c.width)ball.vx*=-1;
+if(ball.y<0||ball.y>c.height)ball.vy*=-1;
+
+ctx.fillStyle="red";
+ctx.beginPath();
+ctx.arc(ball.x,ball.y,10,0,Math.PI*2);
+ctx.fill();
+
+ctx.fillStyle="#00c2ff";
+ctx.fillRect(x,c.height-50,100,10);
+}
+
+/* ---------- SPACE ---------- */
+let bullets=[];
+
+window.addEventListener("click",()=>{
+if(mode==="space"){
+bullets.push({x:x,y:c.height-80});
+}
+});
+
+function spaceGame(){
+
+ctx.fillStyle="#00c2ff";
+ctx.fillRect(x,c.height-100,30,20);
+
+for(let b of bullets){
+b.y-=6;
+ctx.fillStyle="white";
+ctx.fillRect(b.x,b.y,3,10);
+}
+}
+
+/* ---------- CONTROL ---------- */
+window.addEventListener("mousemove",e=>{
+x=e.clientX;
+});
+
+/* ---------- LOOP ---------- */
+function loop(){
+
+ctx.clearRect(0,0,c.width,c.height);
+
+if(mode==="snake")snakeGame();
+if(mode==="break")breakGame();
+if(mode==="space")spaceGame();
+
+requestAnimationFrame(loop);
+}
+
+loop();
 
 </script>
 
