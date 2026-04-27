@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Space Site</title>
+<title>Is7aq Space Site</title>
 
 <style>
 body{
@@ -14,41 +14,74 @@ color:white;
 overflow:hidden;
 }
 
+/* 🌌 background */
 canvas{
 position:fixed;
 top:0;
 left:0;
 }
 
-/* 🧑‍💻 التعريف */
+/* 🧑‍💻 card */
 .card{
 position:absolute;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
-background:rgba(255,255,255,0.06);
+background:rgba(20,20,40,0.75);
 border:1px solid #00c2ff;
-padding:20px;
+padding:25px;
 border-radius:20px;
 width:90%;
-max-width:350px;
+max-width:360px;
 text-align:center;
 backdrop-filter:blur(10px);
-z-index:10;
+box-shadow:0 0 20px #00c2ff33;
 }
 
+h1{
+margin:0;
+color:#00c2ff;
+}
+
+/* buttons */
 button{
 width:100%;
 margin-top:10px;
 padding:12px;
 border:none;
 border-radius:12px;
-background:#00c2ff;
+background:linear-gradient(90deg,#00c2ff,#0077ff);
 color:white;
+font-weight:bold;
 cursor:pointer;
 }
 
-/* 🎮 HUD */
+button:hover{
+transform:scale(1.05);
+}
+
+/* 🌐 socials */
+.social{
+margin-top:10px;
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+
+a{
+text-decoration:none;
+}
+
+.link{
+display:block;
+padding:10px;
+border-radius:10px;
+background:rgba(255,255,255,0.08);
+border:1px solid #00c2ff;
+color:white;
+}
+
+/* HUD */
 .hud{
 position:fixed;
 top:10px;
@@ -58,10 +91,9 @@ padding:10px;
 border:1px solid #00c2ff;
 border-radius:10px;
 display:none;
-z-index:20;
 }
 
-/* 🎮 Canvas */
+/* GAME */
 #game{
 display:none;
 position:fixed;
@@ -77,26 +109,36 @@ height:100%;
 
 <canvas id="bg"></canvas>
 
-<!-- 🧑‍💻 -->
+<!-- 🧑‍💻 PROFILE -->
 <div class="card" id="menu">
-<h2>👨‍💻 اسحاق</h2>
-<p>🇩🇿 من الجزائر</p>
-<p>💻 أحب البرمجة وصناعة الألعاب</p>
+
+<h1>👨‍💻 Is7aq</h1>
+<p>🇩🇿 Developer from Algeria</p>
+<p>💻 Web & Game Creator</p>
+
+<!-- 🌐 SOCIAL -->
+<div class="social">
+<a class="link" href="https://discord.com" target="_blank">💬 Discord: is7_9</a>
+<a class="link" href="https://instagram.com" target="_blank">📸 Instagram: dz16d</a>
+<a class="link" href="https://github.com" target="_blank">💻 GitHub</a>
+</div>
 
 <button onclick="startGame()">🚀 تشغيل لعبة الفضاء</button>
+
 </div>
 
-<!-- ⭐ HUD -->
+<!-- HUD -->
 <div class="hud" id="hud">
-⭐ Score: <span id="score">0</span>
+⭐ Score: <span id="score">0</span><br>
+🔫 Power: <span id="power">1</span>
 </div>
 
-<!-- 🎮 GAME -->
+<!-- GAME -->
 <canvas id="game"></canvas>
 
 <script>
 
-/* 🌌 الخلفية */
+/* 🌌 STARS */
 const bg=document.getElementById("bg");
 const bctx=bg.getContext("2d");
 
@@ -104,82 +146,86 @@ bg.width=innerWidth;
 bg.height=innerHeight;
 
 let stars=[];
-for(let i=0;i<120;i++){
-stars.push({
-x:Math.random()*bg.width,
-y:Math.random()*bg.height
-});
+for(let i=0;i<150;i++){
+stars.push({x:Math.random()*bg.width,y:Math.random()*bg.height});
 }
 
 function drawBg(){
 bctx.clearRect(0,0,bg.width,bg.height);
 bctx.fillStyle="white";
-stars.forEach(s=>{
-bctx.fillRect(s.x,s.y,1.5,1.5);
-});
+for(let s of stars){
+s.y+=0.4;
+if(s.y>bg.height)s.y=0;
+bctx.fillRect(s.x,s.y,2,2);
 }
-setInterval(drawBg,50);
+}
+setInterval(drawBg,30);
 
 /* 🎮 GAME */
-const game=document.getElementById("game");
-const g=game.getContext("2d");
+const c=document.getElementById("game");
+const g=c.getContext("2d");
 
-game.width=innerWidth;
-game.height=innerHeight;
+c.width=innerWidth;
+c.height=innerHeight;
 
-/* player */
-let ship={x:game.width/2,y:game.height-120};
+/* PLAYER */
+let ship={x:c.width/2,y:c.height-120};
 
 let bullets=[];
 let enemies=[];
 
 let score=0;
+let power=1;
 
-/* 🚀 start */
+/* START */
 function startGame(){
 document.getElementById("menu").style.display="none";
 document.getElementById("hud").style.display="block";
-game.style.display="block";
+c.style.display="block";
 }
 
-/* 🎯 control */
+/* CONTROL */
 window.addEventListener("mousemove",e=>{
 ship.x=e.clientX;
 });
 
-/* 🔫 shoot */
+/* SHOOT */
 window.addEventListener("click",()=>{
-if(game.style.display==="block"){
+if(c.style.display==="block"){
 bullets.push({x:ship.x,y:ship.y});
 }
 });
 
-/* 🛸 enemies */
+/* ENEMIES */
 setInterval(()=>{
-if(game.style.display==="block"){
+if(c.style.display==="block"){
 enemies.push({
-x:Math.random()*game.width,
+x:Math.random()*c.width,
 y:-20,
-s:2
+s:2+Math.random()*2
 });
 }
-},800);
+},700);
 
-/* 🎮 loop */
+/* LOOP */
 function loop(){
 
-if(game.style.display==="block"){
+if(c.style.display==="block"){
 
-g.clearRect(0,0,game.width,game.height);
+g.clearRect(0,0,c.width,c.height);
 
 /* 🚀 ship */
 g.fillStyle="#00c2ff";
-g.fillRect(ship.x,ship.y,30,20);
+g.beginPath();
+g.moveTo(ship.x,ship.y);
+g.lineTo(ship.x-15,ship.y+30);
+g.lineTo(ship.x+15,ship.y+30);
+g.fill();
 
 /* bullets */
 for(let i=bullets.length-1;i>=0;i--){
 let b=bullets[i];
-b.y-=7;
+b.y-=8*power;
 
 g.fillStyle="white";
 g.fillRect(b.x,b.y,3,10);
@@ -193,7 +239,7 @@ e.y+=e.s;
 g.fillStyle="red";
 g.fillRect(e.x,e.y,20,20);
 
-/* collision */
+/* hit */
 for(let j=bullets.length-1;j>=0;j--){
 let b=bullets[j];
 
@@ -204,16 +250,24 @@ bullets.splice(j,1);
 
 score++;
 document.getElementById("score").innerText=score;
+
+/* power upgrade */
+if(score % 10 === 0){
+power++;
+document.getElementById("power").innerText=power;
+}
+
 break;
 }
 }
 
 /* game over */
-if(e.y>game.height-100 && Math.abs(e.x-ship.x)<20){
+if(e.y>c.height-100 && Math.abs(e.x-ship.x)<20){
 alert("💥 Game Over | Score: "+score);
 location.reload();
 }
 }
+
 }
 
 requestAnimationFrame(loop);
