@@ -5,7 +5,7 @@ export default function App() {
   const canvasRef = useRef(null);
   const auraRef = useRef(null);
 
-  /* ===== Stars ===== */
+  /* ================= STARS CANVAS ================= */
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -13,7 +13,7 @@ export default function App() {
     let w = (canvas.width = window.innerWidth);
     let h = (canvas.height = window.innerHeight);
 
-    const stars = Array.from({ length: 150 }).map(() => ({
+    const stars = Array.from({ length: 140 }).map(() => ({
       x: Math.random() * w,
       y: Math.random() * h,
       size: Math.random() * 2,
@@ -30,6 +30,7 @@ export default function App() {
         ctx.fill();
 
         s.y += s.speed;
+
         if (s.y > h) {
           s.y = 0;
           s.x = Math.random() * w;
@@ -47,9 +48,10 @@ export default function App() {
     });
   }, []);
 
-  /* ===== Aura Cursor ===== */
+  /* ================= AURA CURSOR ================= */
   useEffect(() => {
-    let x = 0, y = 0, mx = 0, my = 0;
+    let mx = 0, my = 0;
+    let x = 0, y = 0;
 
     const move = (e) => {
       mx = e.clientX;
@@ -60,74 +62,83 @@ export default function App() {
       x += (mx - x) * 0.08;
       y += (my - y) * 0.08;
 
-      auraRef.current.style.transform =
-        `translate(${x - 100}px, ${y - 100}px)`;
+      if (auraRef.current) {
+        auraRef.current.style.transform =
+          `translate(${x - 100}px, ${y - 100}px)`;
+      }
 
       requestAnimationFrame(animate);
     };
 
     window.addEventListener("mousemove", move);
     animate();
+
+    return () => window.removeEventListener("mousemove", move);
   }, []);
 
   return (
-    <div style={styles.body}>
+    <div className="app">
 
-      {/* Stars */}
-      <canvas ref={canvasRef} style={styles.canvas}></canvas>
+      {/* BACKGROUND CANVAS */}
+      <canvas ref={canvasRef} className="stars"></canvas>
 
-      {/* Aura */}
-      <div ref={auraRef} style={styles.aura}></div>
+      {/* AURA CURSOR */}
+      <div ref={auraRef} className="aura"></div>
 
-      {/* Glow */}
-      <div style={styles.glow}></div>
+      {/* GLOW */}
+      <div className="glow"></div>
 
       {/* NAV */}
       <motion.nav
-        style={styles.nav}
-        initial={{ y: -50, opacity: 0 }}
+        className="nav"
+        initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
         <h3>اسحاق</h3>
-        <ul style={styles.ul}>
+
+        <ul>
           <li>الرئيسية</li>
           <li>المشاريع</li>
           <li>تواصل</li>
         </ul>
-        <button style={styles.btn}>تواصل معي</button>
+
+        <button className="btn">تواصل معي</button>
       </motion.nav>
 
       {/* HERO */}
-      <section style={styles.hero}>
+      <section className="hero">
 
         <motion.div
-          initial={{ x: -80, opacity: 0 }}
+          initial={{ x: -60, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.7 }}
         >
-          <h1 style={styles.h1}>
-            مرحباً 👋 أنا <span style={styles.span}>اسحاق</span>
+          <h1>
+            مرحباً 👋 أنا <span>اسحاق</span>
           </h1>
+
           <p>مطوّر مواقع ومصمم واجهات حديثة</p>
 
-          <div style={styles.row}>
-            <button style={styles.btn}>مشاريعي</button>
-            <button style={styles.outline}>تحميل CV</button>
+          <div className="row">
+            <button className="btn">مشاريعي</button>
+            <button className="outline">CV</button>
           </div>
         </motion.div>
 
         <motion.div
-          style={styles.card}
+          className="card"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.6 }}
           whileHover={{ scale: 1.05 }}
         >
           <img
-            style={styles.img}
+            className="img"
             src="https://cdn.discordapp.com/avatars/1200879352875864134/f8dcf7c4b6cef83644eb44beed2fabf3.webp?size=512"
+            alt="profile"
           />
+
           <h3>اسحاق</h3>
           <p>Frontend Developer</p>
         </motion.div>
@@ -136,8 +147,8 @@ export default function App() {
 
       {/* ABOUT */}
       <motion.section
-        style={styles.about}
-        initial={{ opacity: 0, y: 50 }}
+        className="about"
+        initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
@@ -147,174 +158,19 @@ export default function App() {
           <p>مطور واجهات متخصص في بناء مواقع حديثة وسريعة.</p>
         </div>
 
-        <img
-          style={styles.aboutImg}
-          src="https://images.unsplash.com/photo-1498050108023-c5249f4df085"
-        />
+        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" />
       </motion.section>
 
       {/* PROJECTS */}
-      <section style={styles.projects}>
+      <section className="projects">
         <h2>مشاريعي</h2>
 
-        <div style={styles.grid}>
+        <div className="grid">
 
-          {[1,2,3].map((item, i) => (
+          {[1, 2, 3].map((item, i) => (
             <motion.div
               key={i}
-              style={styles.project}
-              initial={{ opacity: 0, y: 50 }}
+              className="project"
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.4, delay: i * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <div style={styles.projectImg}></div>
-              <h3>مشروع {i + 1}</h3>
-              <p>تصميم احترافي وحديث.</p>
-            </motion.div>
-          ))}
-
-        </div>
-      </section>
-
-      {/* MUSIC */}
-      <audio autoPlay loop>
-        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8b3d3d2d1.mp3" />
-      </audio>
-
-    </div>
-  );
-}
-
-/* ===== Styles ===== */
-const styles = {
-  body: {
-    background: "#05060a",
-    color: "white",
-    fontFamily: "sans-serif",
-    minHeight: "100vh",
-    overflowX: "hidden",
-  },
-
-  canvas: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-  },
-
-  glow: {
-    position: "fixed",
-    width: 600,
-    height: 600,
-    background: "radial-gradient(circle,#7c3aed55,transparent 60%)",
-    filter: "blur(120px)",
-    top: -200,
-    right: -200,
-  },
-
-  aura: {
-    position: "fixed",
-    width: 200,
-    height: 200,
-    borderRadius: "50%",
-    background:
-      "radial-gradient(circle,#7c3aed55,#60a5fa33,transparent 70%)",
-    filter: "blur(25px)",
-    pointerEvents: "none",
-    zIndex: 999,
-  },
-
-  nav: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: 20,
-    position: "relative",
-    zIndex: 10,
-  },
-
-  ul: {
-    display: "flex",
-    gap: 20,
-    listStyle: "none",
-  },
-
-  hero: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    padding: 40,
-    zIndex: 2,
-    position: "relative",
-  },
-
-  h1: { fontSize: 50 },
-
-  span: { color: "#a78bfa" },
-
-  row: { display: "flex", gap: 10, marginTop: 20 },
-
-  btn: {
-    background: "#7c3aed",
-    border: "none",
-    padding: "10px 15px",
-    color: "white",
-    borderRadius: 10,
-    cursor: "pointer",
-  },
-
-  outline: {
-    border: "1px solid #7c3aed",
-    padding: "10px 15px",
-    borderRadius: 10,
-    background: "transparent",
-    color: "white",
-  },
-
-  card: {
-    background: "rgba(255,255,255,0.05)",
-    padding: 20,
-    borderRadius: 20,
-    textAlign: "center",
-  },
-
-  img: {
-    width: 130,
-    height: 130,
-    borderRadius: "50%",
-    border: "3px solid #7c3aed",
-  },
-
-  about: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    padding: 40,
-  },
-
-  aboutImg: {
-    width: "100%",
-    borderRadius: 20,
-  },
-
-  projects: {
-    padding: 40,
-  },
-
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))",
-    gap: 20,
-  },
-
-  project: {
-    background: "rgba(255,255,255,0.05)",
-    padding: 20,
-    borderRadius: 15,
-  },
-
-  projectImg: {
-    height: 120,
-    background: "linear-gradient(135deg,#7c3aed,#60a5fa)",
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-};
+              whileHover={{ scale: 1.06 }
