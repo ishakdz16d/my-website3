@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Space Game Profile</title>
+<title>Cyber Space Profile</title>
 
 <style>
 body {
@@ -12,6 +12,20 @@ body {
   font-family: Arial;
   background: black;
   color: white;
+}
+
+/* 🌌 خلفية */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+/* 🧠 عنوان نيون */
+.neon {
+  color: #00c2ff;
+  text-shadow: 0 0 5px #00c2ff, 0 0 15px #00c2ff, 0 0 30px #0088ff;
 }
 
 /* 🎮 HUD */
@@ -53,7 +67,7 @@ body {
   100% { transform: rotate(360deg); }
 }
 
-/* 🧑‍🚀 مركز */
+/* 🧑‍🚀 وسط */
 .center {
   position: absolute;
   width: 100%;
@@ -62,64 +76,97 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 5;
   text-align: center;
+  z-index: 5;
 }
 
-.title {
-  font-size: 40px;
-}
-
-/* 📦 مربع التواصل */
-.social-box {
-  margin-top: 20px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.2);
-  padding: 20px;
-  border-radius: 20px;
+/* 📦 مربع */
+.app {
+  margin: 10px 0;
   width: 90%;
-  max-width: 360px;
+  max-width: 320px;
+
+  background: rgba(255,255,255,0.05);
+  border-radius: 18px;
+  padding: 15px;
+
+  border: 1px solid rgba(0,194,255,0.4);
+  box-shadow: 0 0 15px rgba(0,194,255,0.2);
+
   backdrop-filter: blur(10px);
+  transition: 0.3s;
 }
 
-.social-btn {
+.app:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(0,194,255,0.5);
+}
+
+/* 🔘 زر داخل المربع */
+.app-btn {
   width: 100%;
-  margin-top: 10px;
   padding: 12px;
+  margin-top: 10px;
+
   border: none;
   border-radius: 12px;
+
   background: rgba(0,0,0,0.4);
   color: white;
+
   cursor: pointer;
   transition: 0.3s;
 }
 
-.social-btn:hover {
-  background: rgba(0,194,255,0.3);
-  transform: scale(1.03);
+.app-btn:hover {
+  background: rgba(0,194,255,0.25);
 }
 
-/* 🎵 زر الموسيقى */
+/* 🔷 شعار */
+.logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 15px;
+  border: 2px solid #00c2ff;
+  margin: auto;
+  display: block;
+}
+
+/* 📌 الأعلى */
+.top {
+  position: fixed;
+  top: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* 📌 الأسفل */
+.bottom {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* 🎵 زر موسيقى */
 .music-btn {
   position: fixed;
   bottom: 20px;
   left: 20px;
   z-index: 20;
+
   padding: 12px 16px;
   border: none;
   border-radius: 12px;
-  background: rgba(0,194,255,0.85);
+
+  background: #00c2ff;
   color: white;
   cursor: pointer;
-  backdrop-filter: blur(6px);
-}
-
-/* 🌌 canvas */
-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 0;
+  box-shadow: 0 0 15px #00c2ff;
 }
 </style>
 </head>
@@ -128,33 +175,41 @@ canvas {
 
 <canvas id="space"></canvas>
 
-<!-- HUD -->
-<div class="hud">👨‍🚀 SPACE PROFILE</div>
+<!-- 🎮 HUD -->
+<div class="hud">👨‍🚀 SPACE MODE ACTIVE</div>
 
-<!-- Radar -->
+<!-- 🎯 Radar -->
 <div class="radar"></div>
 
-<!-- Center UI -->
+<!-- 🔼 Discord -->
+<div class="top">
+  <div class="app">
+    <img class="logo" src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png">
+    <button class="app-btn" onclick="openDiscord()">💬 Discord: is7_9</button>
+  </div>
+</div>
+
+<!-- 🧑‍🚀 وسط -->
 <div class="center">
 
-  <div class="title">🚀 Space Commander</div>
-  <p>Developer Space Interface</p>
+  <h1 class="neon">🚀 Cyber Space Profile</h1>
 
-  <div class="social-box">
-
-    <button class="social-btn" onclick="openDiscord()">
-      💬 Discord: is7_9
-    </button>
-
-    <button class="social-btn" onclick="openInstagram()">
-      📸 Instagram: dz16d
-    </button>
-
+  <div class="app">
+    <img class="logo" src="https://cdn-icons-png.flaticon.com/512/174/174855.png">
+    <button class="app-btn" onclick="openInstagram()">📸 Instagram: dz16d</button>
   </div>
 
 </div>
 
-<!-- موسيقى -->
+<!-- 🔽 Game -->
+<div class="bottom">
+  <div class="app">
+    <img class="logo" src="https://cdn-icons-png.flaticon.com/512/5968/5968705.png">
+    <button class="app-btn">🎮 Game Zone</button>
+  </div>
+</div>
+
+<!-- 🎵 موسيقى -->
 <button class="music-btn" onclick="toggleMusic()">🎵 Music</button>
 
 <audio id="music" loop>
@@ -186,7 +241,7 @@ function openInstagram(){
   window.open("https://instagram.com/dz16d","_blank");
 }
 
-/* 🌌 THREE SPACE (Canvas stars 3D effect light) */
+/* 🌌 نجوم + ماوس */
 const canvas = document.getElementById("space");
 const ctx = canvas.getContext("2d");
 
@@ -205,13 +260,12 @@ for(let i=0;i<250;i++){
   });
 }
 
-/* 🖱️ mouse move effect */
 window.addEventListener("mousemove",(e)=>{
   mouse.x = e.clientX;
   mouse.y = e.clientY;
 });
 
-/* 🌠 shooting stars */
+/* شهب */
 function shoot(){
   shooting.push({
     x: Math.random()*canvas.width,
@@ -223,11 +277,11 @@ function shoot(){
 
 setInterval(shoot,2500);
 
-/* 🎨 draw */
+/* رسم */
 function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  /* stars */
+  // stars
   ctx.fillStyle="white";
 
   stars.forEach(s=>{
@@ -235,11 +289,11 @@ function draw(){
     let dy = (mouse.y - canvas.height/2)*0.002;
 
     ctx.beginPath();
-    ctx.arc(s.x+dx, s.y+dy, s.r, 0, Math.PI*2);
+    ctx.arc(s.x+dx,s.y+dy,s.r,0,Math.PI*2);
     ctx.fill();
   });
 
-  /* shooting stars */
+  // shooting stars
   for(let i=0;i<shooting.length;i++){
     let s = shooting[i];
 
