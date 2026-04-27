@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Games Hub</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:black;
+color:white;
+text-align:center;
+}
+
+.card{
+margin-top:80px;
+background:rgba(255,255,255,0.06);
+border:1px solid #00c2ff;
+padding:20px;
+border-radius:20px;
+width:90%;
+max-width:350px;
+margin-left:auto;
+margin-right:auto;
+}
+
+button{
+width:100%;
+margin-top:10px;
+padding:12px;
+border:none;
+border-radius:12px;
+background:#00c2ff;
+color:white;
+cursor:pointer;
+}
+
+.back{
+position:fixed;
+top:10px;
+right:10px;
+}
+</style>
+</head>
+
+<body>
+
+<button class="back" onclick="back()">⬅ رجوع</button>
+
+<div class="card">
+<h2>🎮 Game Hub</h2>
+
+<button onclick="startGame()">🚀 لعبة الفضاء</button>
+<button onclick="alert('قريباً 🐍 Snake')">🐍 Snake</button>
+<button onclick="alert('قريباً 🧱 Break')">🧱 Break</button>
+</div>
+
+<script>
+function back(){
+window.location.href="index.html";
+}
+
+function startGame(){
+window.location.href="space.html";
+}
+</script>
+
+</body>
+</html>
