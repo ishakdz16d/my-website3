@@ -3,8 +3,9 @@ import { useEffect, useRef } from "react";
 
 export default function App() {
   const auraRef = useRef(null);
+  const canvasRef = useRef(null);
 
-  /* ===== Aura Mouse ===== */
+  /* ===== Aura ===== */
   useEffect(() => {
     let x = 0, y = 0, mx = 0, my = 0;
 
@@ -17,8 +18,10 @@ export default function App() {
       x += (mx - x) * 0.08;
       y += (my - y) * 0.08;
 
-      auraRef.current.style.transform =
-        `translate(${x - 120}px, ${y - 120}px)`;
+      if (auraRef.current) {
+        auraRef.current.style.transform =
+          `translate(${x - 120}px, ${y - 120}px)`;
+      }
 
       requestAnimationFrame(animate);
     };
@@ -27,11 +30,54 @@ export default function App() {
     animate();
   }, []);
 
+  /* ===== Stars ===== */
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+
+    const stars = Array.from({ length: 120 }).map(() => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      size: Math.random() * 2,
+      speed: Math.random() * 0.5 + 0.2,
+    }));
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = "white";
+
+      stars.forEach(s => {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        s.y += s.speed;
+        if (s.y > h) {
+          s.y = 0;
+          s.x = Math.random() * w;
+        }
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    draw();
+
+    window.addEventListener("resize", () => {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    });
+  }, []);
+
   return (
     <div className="app">
 
+      <canvas ref={canvasRef} className="stars"></canvas>
       <div ref={auraRef} className="aura"></div>
-      <div className="bg-glow"></div>
+      <div className="glow"></div>
 
       {/* NAV */}
       <motion.nav
@@ -44,7 +90,6 @@ export default function App() {
         <ul>
           <li className="active">الرئيسية</li>
           <li>عني</li>
-          <li>المهارات</li>
           <li>المشاريع</li>
           <li>تواصل</li>
         </ul>
@@ -55,85 +100,79 @@ export default function App() {
       {/* HERO */}
       <section className="hero">
 
-        {/* LEFT */}
         <motion.div
-          className="hero-left"
-          initial={{ x: -80, opacity: 0 }}
+          initial={{ x: -60, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
         >
-          <p className="small">مرحباً بك في موقعي الشخصي 👋</p>
-
+          <p className="small">مرحباً 👋</p>
           <h1>اسحاق</h1>
 
-          <h3>
-            مطور مواقع <span>&lt;/&gt;</span>
-          </h3>
-
           <p className="desc">
-            أحب البرمجة وتصميم المواقع وأسعى دائماً لتطوير مهاراتي
+            مطور واجهات حديثة أحب بناء مواقع احترافية
           </p>
 
-          <div className="hero-btns">
-            <button className="btn glow-btn">تواصل معي</button>
-            <button className="outline">معرض أعمالي</button>
+          <div className="buttons">
+            <button className="btn">تواصل</button>
+            <button className="outline">أعمالي</button>
           </div>
-
         </motion.div>
 
-        {/* RIGHT CARD */}
         <motion.div
-          className="profile-card"
+          className="card"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          whileHover={{ scale: 1.03 }}
+          whileHover={{ scale: 1.05 }}
         >
-          <div className="avatar-wrap">
-            <img src="https://cdn.discordapp.com/avatars/1200879352875864134/f8dcf7c4b6cef83644eb44beed2fabf3.webp?size=512" />
-          </div>
-
-          <h2>اسحاق</h2>
-          <p className="role">مطور مبتدئ</p>
-
-          <div className="social-box discord">
-            Discord — is7_9
-          </div>
-
-          <div className="social-box insta">
-            Instagram — dz16d
-          </div>
+          <img src="https://cdn.discordapp.com/avatars/1200879352875864134/f8dcf7c4b6cef83644eb44beed2fabf3.webp?size=512" />
+          <h3>اسحاق</h3>
+          <p>Frontend Developer</p>
         </motion.div>
 
       </section>
 
-      {/* STATS */}
-      <motion.section
-        className="stats"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-      >
-        {[
-          ["10+", "مشروع"],
-          ["200+", "ساعة برمجة"],
-          ["1+", "سنة خبرة"],
-          ["100%", "شغف"],
-        ].map((s, i) => (
-          <div key={i} className="stat">
-            <h2>{s[0]}</h2>
-            <p>{s[1]}</p>
-          </div>
-        ))}
-      </motion.section>
+      {/* PROJECTS */}
+      <section className="projects">
+        <h2>مشاريعي</h2>
 
-      {/* STYLE */}
+        <div className="grid">
+          {[1,2,3].map((i)=>(
+            <motion.div
+              key={i}
+              className="project"
+              initial={{ opacity:0, y:40 }}
+              whileInView={{ opacity:1, y:0 }}
+              whileHover={{ scale:1.05 }}
+            >
+              <div className="box"></div>
+              <h3>مشروع {i}</h3>
+              <p>تصميم احترافي</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* MUSIC */}
+      <audio autoPlay loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8b3d3d2d1.mp3" />
+      </audio>
+
+      {/* CSS */}
       <style>{`
         body{
           margin:0;
           background:#05060a;
           color:white;
-          font-family:Cairo, sans-serif;
+          font-family:sans-serif;
         }
 
-        .bg-glow{
+        .stars{
+          position:fixed;
+          top:0;
+          left:0;
+          z-index:0;
+        }
+
+        .glow{
           position:fixed;
           width:600px;
           height:600px;
@@ -156,110 +195,81 @@ export default function App() {
         .nav{
           display:flex;
           justify-content:space-between;
-          padding:20px 60px;
-          align-items:center;
+          padding:20px 50px;
         }
 
         ul{
           display:flex;
-          gap:25px;
+          gap:20px;
           list-style:none;
-        }
-
-        .active{
-          color:#a78bfa;
         }
 
         .hero{
           display:grid;
           grid-template-columns:1fr 1fr;
-          padding:60px;
-          gap:40px;
+          padding:50px;
         }
 
         h1{
-          font-size:70px;
-          margin:10px 0;
+          font-size:60px;
         }
 
-        h3 span{
-          color:#a78bfa;
-        }
-
-        .desc{
-          opacity:.7;
-        }
-
-        .hero-btns{
+        .buttons{
           margin-top:20px;
           display:flex;
           gap:10px;
         }
 
         .btn{
-          background:linear-gradient(135deg,#7c3aed,#4f46e5);
+          background:#7c3aed;
           border:none;
-          padding:12px 18px;
-          border-radius:12px;
+          padding:10px 15px;
           color:white;
-          cursor:pointer;
+          border-radius:10px;
         }
 
         .outline{
           border:1px solid #7c3aed;
           background:transparent;
-          padding:12px 18px;
-          border-radius:12px;
+          padding:10px 15px;
           color:white;
+          border-radius:10px;
         }
 
-        .profile-card{
+        .card{
           background:rgba(255,255,255,0.05);
-          padding:30px;
-          border-radius:25px;
+          padding:20px;
+          border-radius:20px;
           text-align:center;
-          backdrop-filter:blur(12px);
-          border:1px solid rgba(255,255,255,0.08);
         }
 
-        .avatar-wrap img{
-          width:140px;
-          height:140px;
+        .card img{
+          width:120px;
+          height:120px;
           border-radius:50%;
-          border:3px solid #7c3aed;
         }
 
-        .role{
-          color:#a78bfa;
+        .projects{
+          padding:40px;
         }
 
-        .social-box{
-          margin-top:15px;
-          padding:12px;
-          border-radius:12px;
-          background:rgba(255,255,255,0.05);
-        }
-
-        .discord{
-          background:linear-gradient(90deg,#5865f2,#7c3aed);
-        }
-
-        .insta{
-          background:linear-gradient(90deg,#ff4d4d,#f43f5e);
-        }
-
-        .stats{
+        .grid{
           display:grid;
-          grid-template-columns:repeat(4,1fr);
+          grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
           gap:20px;
-          padding:40px 60px;
         }
 
-        .stat{
+        .project{
           background:rgba(255,255,255,0.05);
           padding:20px;
           border-radius:15px;
-          text-align:center;
+        }
+
+        .box{
+          height:100px;
+          background:linear-gradient(135deg,#7c3aed,#60a5fa);
+          border-radius:10px;
+          margin-bottom:10px;
         }
       `}</style>
 
