@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IS7AQ SPACE GAME</title>
+<title>IS7AQ SPACE FINAL</title>
 
 <style>
 body{
@@ -14,14 +14,13 @@ background:black;
 color:white;
 }
 
-/* 🌌 BACKGROUND */
 canvas{
 position:fixed;
 top:0;
 left:0;
 }
 
-/* ===== MENU ===== */
+/* MENU */
 #menu{
 position:absolute;
 width:100%;
@@ -63,7 +62,7 @@ font-weight:bold;
 cursor:pointer;
 }
 
-/* ===== HUD ===== */
+/* HUD */
 #hud{
 position:fixed;
 top:10px;
@@ -112,8 +111,12 @@ font-size:30px;
 
 <!-- 🧑‍💻 MENU -->
 <div id="menu">
-<h1>🚀 IS7AQ SPACE</h1>
 
+<h1>🚀 IS7AQ</h1>
+<p>🇩🇿 Developer from Algeria</p>
+<p>💻 Web & Game Creator</p>
+
+<!-- 🌐 SOCIAL -->
 <a href="#" onclick="alert('Discord: is7_9')">💬 Discord</a>
 <a href="#" onclick="alert('Instagram: dz16d')">📸 Instagram</a>
 
@@ -172,16 +175,21 @@ c.width=innerWidth;
 c.height=innerHeight;
 
 /* PLAYER */
-let ship={x:c.width/2,y:c.height-120};
+let ship={
+x:c.width/2,
+y:c.height-120
+};
 
 let bullets=[];
 let enemies=[];
 
+/* SYSTEM */
 let lives=3;
 let score=0;
 let power=1;
+let lastHit=0;
 
-/* START GAME → SWITCH SCREENS */
+/* START */
 function startGame(){
 document.getElementById("menu").style.display="none";
 document.getElementById("hud").style.display="block";
@@ -216,7 +224,6 @@ update();
 }
 }
 
-/* UPDATE */
 function update(){
 document.getElementById("lives").innerText=lives;
 document.getElementById("score").innerText=score;
@@ -228,7 +235,7 @@ function loop(){
 
 g.clearRect(0,0,c.width,c.height);
 
-/* SHIP */
+/* 🚀 ship */
 g.fillStyle="#00c2ff";
 g.beginPath();
 g.moveTo(ship.x,ship.y);
@@ -236,7 +243,7 @@ g.lineTo(ship.x-15,ship.y+30);
 g.lineTo(ship.x+15,ship.y+30);
 g.fill();
 
-/* BULLETS */
+/* bullets */
 for(let i=bullets.length-1;i>=0;i--){
 let b=bullets[i];
 b.y-=10;
@@ -245,7 +252,7 @@ g.fillStyle="white";
 g.fillRect(b.x,b.y,3,10);
 }
 
-/* ENEMIES */
+/* enemies */
 for(let i=enemies.length-1;i>=0;i--){
 let e=enemies[i];
 e.y+=e.speed;
@@ -253,7 +260,7 @@ e.y+=e.speed;
 g.fillStyle="red";
 g.fillRect(e.x,e.y,25,20);
 
-/* HIT */
+/* HIT BULLET */
 for(let j=bullets.length-1;j>=0;j--){
 let b=bullets[j];
 
@@ -268,15 +275,23 @@ break;
 }
 }
 
-/* PLAYER HIT */
-if(e.y>ship.y && Math.abs(e.x-ship.x)<25){
+/* 💥 PLAYER HIT (FIXED) */
+let now = Date.now();
 
-enemies.splice(i,1);
+if(e.y > ship.y && Math.abs(e.x - ship.x) < 20){
+
+if(now - lastHit > 1200){
+
 lives--;
+lastHit = now;
+
+if(navigator.vibrate) navigator.vibrate(120);
+
 update();
 
-if(lives<=0){
+if(lives <= 0){
 document.getElementById("over").style.display="flex";
+}
 }
 }
 }
