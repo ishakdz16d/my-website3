@@ -3,189 +3,198 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Is7aq Portfolio</title>
+<title>Space Game PRO MAX</title>
 
 <style>
 body {
   margin: 0;
   overflow: hidden;
-  font-family: Arial;
   background: black;
+  font-family: Arial;
   color: white;
 }
 
-/* 🌌 الخلفية */
-canvas {
+canvas { display: block; }
+
+.hud {
   position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 0;
-}
-
-/* 🧑‍💻 التعريف */
-.center {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  z-index: 5;
-}
-
-.card {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid #00c2ff;
-  padding: 20px;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 350px;
-  backdrop-filter: blur(10px);
-}
-
-/* 🔘 أزرار */
-button {
-  margin-top: 10px;
-  padding: 10px 15px;
-  border: none;
+  top: 10px;
+  left: 10px;
+  background: rgba(0,0,0,0.6);
+  padding: 10px;
   border-radius: 10px;
+  border: 1px solid #00c2ff;
+}
+
+.shop {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgba(0,0,0,0.6);
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #00c2ff;
+}
+
+button {
+  margin-top: 5px;
+  padding: 6px;
+  border: none;
+  border-radius: 8px;
   background: #00c2ff;
   color: white;
   cursor: pointer;
-}
-
-/* 🎮 لعبة صغيرة */
-canvas#game {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 200px;
-  z-index: 2;
-}
-
-/* 🎵 زر موسيقى */
-.music {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  z-index: 10;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="bg"></canvas>
 <canvas id="game"></canvas>
 
-<!-- 👨‍💻 تعريف -->
-<div class="center">
-
-  <div class="card">
-    <h2>👨‍💻 اسحاق</h2>
-    <p>🇩🇿 من الجزائر</p>
-    <p>💻 أحب البرمجة وصناعة المواقع</p>
-
-    <button onclick="openDiscord()">💬 Discord: is7_9</button>
-    <button onclick="openInstagram()">📸 Instagram: dz16d</button>
-  </div>
-
+<div class="hud">
+⭐ Score: <span id="score">0</span><br>
+💥 Damage: <span id="dmg">1</span><br>
+🔫 Weapon: <span id="w">Normal</span><br>
+👑 Boss HP: <span id="bhp">-</span>
 </div>
 
-<!-- 🎵 موسيقى -->
-<button class="music" onclick="toggleMusic()">🎵 Music</button>
-
-<audio id="music" loop>
-<source src="https://cdn.pixabay.com/audio/2022/03/15/audio_9b3b3b7f3a.mp3">
-</audio>
+<div class="shop">
+🛒 Shop<br>
+<button onclick="upgrade()">Upgrade Damage</button>
+</div>
 
 <script>
 
-/* 🎵 موسيقى */
-const music = document.getElementById("music");
-let playing = false;
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
 
-function toggleMusic(){
-  if(!playing){
-    music.play();
-    playing = true;
-  } else {
-    music.pause();
-    playing = false;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let shipX = canvas.width/2;
+
+let bullets = [];
+let enemies = [];
+let boss = null;
+
+let score = 0;
+let damage = 1;
+let weapon = "normal";
+
+/* 🔊 صوت */
+function sound(type){
+  let a = new (window.AudioContext || window.webkitAudioContext)();
+  let o = a.createOscillator();
+  let g = a.createGain();
+
+  o.connect(g);
+  g.connect(a.destination);
+
+  if(type==="laser") o.frequency.value = 800;
+  if(type==="normal") o.frequency.value = 400;
+  if(type==="bomb") o.frequency.value = 200;
+
+  o.start();
+  o.stop(a.currentTime + 0.08);
+}
+
+/* 🎯 ترقية */
+function upgrade(){
+  if(score >= 5){
+    score -= 5;
+    damage++;
   }
 }
 
-/* 🔗 روابط */
-function openDiscord(){
-  window.open("https://discord.com/users/is7_9","_blank");
-}
-
-function openInstagram(){
-  window.open("https://instagram.com/dz16d","_blank");
-}
-
-/* 🌌 نجوم الخلفية */
-const bg = document.getElementById("bg");
-const btx = bg.getContext("2d");
-
-bg.width = window.innerWidth;
-bg.height = window.innerHeight;
-
-let stars = [];
-
-for(let i=0;i<150;i++){
-  stars.push({
-    x: Math.random()*bg.width,
-    y: Math.random()*bg.height
-  });
-}
-
-function drawBg(){
-  btx.clearRect(0,0,bg.width,bg.height);
-
-  btx.fillStyle="white";
-  stars.forEach(s=>{
-    btx.fillRect(s.x,s.y,1.5,1.5);
-  });
-}
-
-setInterval(drawBg, 50);
-
-/* 🎮 لعبة صغيرة */
-const game = document.getElementById("game");
-const ctx = game.getContext("2d");
-
-game.width = window.innerWidth;
-game.height = 200;
-
-let shipX = game.width/2;
-let enemies = [];
-
-/* تحكم */
+/* التحكم */
 window.addEventListener("mousemove",e=>shipX=e.clientX);
+window.addEventListener("touchmove",e=>shipX=e.touches[0].clientX);
+
+/* سلاح */
+window.addEventListener("keydown",(e)=>{
+  if(e.key==="1") weapon="normal";
+  if(e.key==="2") weapon="laser";
+  if(e.key==="3") weapon="bomb";
+
+  document.getElementById("w").innerText = weapon;
+});
+
+/* إطلاق */
+window.addEventListener("click",shoot);
+window.addEventListener("touchstart",shoot);
+
+function shoot(){
+  bullets.push({
+    x: shipX,
+    y: canvas.height-60,
+    type: weapon
+  });
+
+  sound(weapon);
+}
 
 /* أعداء */
 function spawn(){
   enemies.push({
-    x: Math.random()*game.width,
-    y: 0,
-    speed: 2
+    x: Math.random()*canvas.width,
+    y: -20,
+    speed: 2+Math.random()*2
   });
 }
+setInterval(spawn,700);
 
-setInterval(spawn,1000);
+/* 👑 Boss */
+function spawnBoss(){
+  boss = {
+    x: canvas.width/2,
+    y: 120,
+    hp: 30,
+    dir: 1
+  };
+}
 
-/* رسم */
+/* انفجار */
+let explosions = [];
+function boom(x,y){
+  explosions.push({x,y,r:0});
+}
+
+/* اللعبة */
 function update(){
-  ctx.clearRect(0,0,game.width,game.height);
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
   /* سفينة */
   ctx.fillStyle="#00c2ff";
-  ctx.fillRect(shipX,160,30,20);
+  ctx.fillRect(shipX,canvas.height-80,30,20);
 
-  /* أعداء */
+  /* bullets */
+  for(let i=0;i<bullets.length;i++){
+    let b = bullets[i];
+    b.y -= 8;
+
+    if(b.type==="laser"){
+      ctx.fillStyle="cyan";
+      ctx.fillRect(b.x,b.y,2,20);
+    }
+
+    if(b.type==="normal"){
+      ctx.fillStyle="white";
+      ctx.fillRect(b.x,b.y,3,10);
+    }
+
+    if(b.type==="bomb"){
+      ctx.fillStyle="orange";
+      ctx.beginPath();
+      ctx.arc(b.x,b.y,6,0,Math.PI*2);
+      ctx.fill();
+    }
+
+    if(b.y<0) bullets.splice(i,1);
+  }
+
+  /* enemies */
   for(let i=0;i<enemies.length;i++){
     let e = enemies[i];
     e.y += e.speed;
@@ -193,16 +202,89 @@ function update(){
     ctx.fillStyle="red";
     ctx.fillRect(e.x,e.y,20,20);
 
-    if(e.y > 200){
-      enemies.splice(i,1);
-    }
-
-    /* تصادم */
-    if(Math.abs(e.x-shipX)<20 && e.y>150){
-      alert("💥 Game Over");
+    if(e.y>canvas.height-100 && Math.abs(e.x-shipX)<25){
+      alert("💥 Game Over | Score: "+score);
       location.reload();
     }
+
+    for(let j=0;j<bullets.length;j++){
+      let b = bullets[j];
+
+      if(Math.abs(b.x-e.x)<25 && Math.abs(b.y-e.y)<25){
+
+        enemies.splice(i,1);
+        bullets.splice(j,1);
+
+        score += damage;
+        boom(e.x,e.y);
+        sound("normal");
+        break;
+      }
+    }
+
+    if(e.y>canvas.height){
+      enemies.splice(i,1);
+      score++;
+    }
   }
+
+  /* 👑 Boss (لا يتأثر إلا بالليزر) */
+  if(boss){
+
+    boss.x += boss.dir * 3;
+    if(boss.x<50 || boss.x>canvas.width-50) boss.dir *= -1;
+
+    ctx.fillStyle="purple";
+    ctx.beginPath();
+    ctx.arc(boss.x,boss.y,45,0,Math.PI*2);
+    ctx.fill();
+
+    for(let i=0;i<bullets.length;i++){
+      let b = bullets[i];
+
+      if(Math.abs(b.x-boss.x)<45 && Math.abs(b.y-boss.y)<45){
+
+        if(b.type === "laser"){
+          boss.hp -= damage;
+          boom(boss.x,boss.y);
+          sound("laser");
+        }
+
+        bullets.splice(i,1);
+
+        if(boss.hp <= 0){
+          boss = null;
+          score += 25;
+        }
+      }
+    }
+
+    document.getElementById("bhp").innerText = boss.hp;
+  } else {
+    document.getElementById("bhp").innerText = "-";
+  }
+
+  /* spawn boss */
+  if(score > 15 && !boss){
+    spawnBoss();
+  }
+
+  /* انفجارات */
+  for(let i=0;i<explosions.length;i++){
+    let ex = explosions[i];
+
+    ctx.strokeStyle="rgba(0,194,255,0.7)";
+    ctx.beginPath();
+    ctx.arc(ex.x,ex.y,ex.r,0,Math.PI*2);
+    ctx.stroke();
+
+    ex.r += 3;
+
+    if(ex.r > 30) explosions.splice(i,1);
+  }
+
+  document.getElementById("score").innerText = score;
+  document.getElementById("dmg").innerText = damage;
 
   requestAnimationFrame(update);
 }
@@ -211,9 +293,8 @@ update();
 
 /* resize */
 window.addEventListener("resize",()=>{
-  bg.width = window.innerWidth;
-  bg.height = window.innerHeight;
-  game.width = window.innerWidth;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 });
 
 </script>
