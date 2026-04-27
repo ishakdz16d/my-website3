@@ -2,6 +2,7 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>موقعي الفضائي</title>
 
 <style>
@@ -9,10 +10,26 @@ body {
   margin: 0;
   overflow: hidden;
   font-family: Arial;
-  background: black;
   color: white;
+
+  background: radial-gradient(circle at top,
+    #1a1a40 0%,
+    #0a0a1f 50%,
+    #000 100%);
 }
 
+/* 🌌 مجرة خفيفة */
+.galaxy {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: url("https://i.imgur.com/3e5YL4X.png");
+  background-size: cover;
+  opacity: 0.25;
+  z-index: -2;
+}
+
+/* النجوم */
 canvas {
   position: fixed;
   top: 0;
@@ -27,15 +44,21 @@ canvas {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  padding: 20px;
 }
 
-/* العنوان */
 h1 {
-  font-size: 40px;
+  font-size: 42px;
 }
 
-/* الأزرار */
-button {
+p {
+  opacity: 0.8;
+}
+
+/* زر */
+.main-btn {
+  margin-top: 15px;
   padding: 12px 20px;
   border: none;
   border-radius: 12px;
@@ -43,52 +66,85 @@ button {
   color: white;
   font-size: 16px;
   cursor: pointer;
-  transition: 0.3s;
 }
 
-button:hover {
-  transform: scale(1.05);
-}
-
-/* السوشيال */
+/* روابط */
 .social {
-  margin-top: 25px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
+  width: 100%;
+  max-width: 350px;
 }
 
 .box {
   display: flex;
   align-items: center;
-  gap: 15px;
-  justify-content: center;
-  background: rgba(255,255,255,0.05);
+  gap: 10px;
+  background: rgba(255,255,255,0.06);
   padding: 10px;
   border-radius: 15px;
 }
 
 .box img {
-  width: 60px;
-  height: 60px;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
   border: 2px solid white;
+}
+
+.box button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background: #111;
+  color: white;
+  cursor: pointer;
+}
+
+/* 📱 الهاتف */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 28px;
+  }
+
+  .main-btn {
+    width: 80%;
+    font-size: 14px;
+  }
+
+  .box {
+    flex-direction: row;
+  }
+}
+
+/* 💻 الكمبيوتر */
+@media (min-width: 1000px) {
+  h1 {
+    font-size: 50px;
+  }
+
+  .social {
+    max-width: 420px;
+  }
 }
 </style>
 </head>
 
 <body>
 
+<div class="galaxy"></div>
 <canvas id="sky"></canvas>
 
 <div class="content">
 
-<h1>✨ مرحبا بك في السماء</h1>
-<p>نجوم + شهب + موسيقى + روابط</p>
+<h1>✨ سماء هادئة</h1>
+<p>يعمل على الهاتف والكمبيوتر</p>
 
-<button onclick="toggleMusic()">▶ تشغيل الموسيقى</button>
+<button class="main-btn" onclick="toggleMusic()">▶ تشغيل الموسيقى</button>
 
-<!-- روابط -->
 <div class="social">
 
   <div class="box">
@@ -112,7 +168,7 @@ button:hover {
 
 <script>
 
-/* ========== الموسيقى ========== */
+/* 🎵 موسيقى */
 const music = document.getElementById("music");
 let playing = false;
 
@@ -126,7 +182,7 @@ function toggleMusic() {
   }
 }
 
-/* ========== الروابط ========== */
+/* 🔗 روابط */
 function openDiscord() {
   window.open("https://discord.com/users/is7_9", "_blank");
 }
@@ -135,39 +191,43 @@ function openInstagram() {
   window.open("https://instagram.com/dz16d", "_blank");
 }
 
-/* ========== النجوم ========== */
+/* 🌌 نجوم */
 const canvas = document.getElementById("sky");
 const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
 
 let stars = [];
 let shooting = [];
 
 /* نجوم */
-for (let i = 0; i < 200; i++) {
+for (let i = 0; i < 180; i++) {
   stars.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
     r: Math.random() * 1.5
   });
 }
 
-/* شهاب */
+/* شهب */
 function createShooting() {
   shooting.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height / 2,
-    len: 80,
-    speed: 8
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight / 2,
+    len: 70,
+    speed: 6 + Math.random() * 4
   });
 }
 
-setInterval(createShooting, 2500);
+setInterval(createShooting, 3000);
 
 function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
   /* نجوم */
   ctx.fillStyle = "white";
@@ -190,7 +250,7 @@ function draw() {
     s.x += s.speed;
     s.y += s.speed;
 
-    if (s.x > canvas.width) {
+    if (s.x > canvas.width || s.y > canvas.height) {
       shooting.splice(i,1);
     }
   }
@@ -202,12 +262,6 @@ function animate() {
 }
 
 animate();
-
-/* resize */
-window.addEventListener("resize", () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
 
 </script>
 
