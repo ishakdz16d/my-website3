@@ -1,233 +1,197 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>اسحاق | Portfolio</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 body{
-margin:0;
-font-family:'Cairo',sans-serif;
-background:#070A12;
-color:#fff;
-overflow-x:hidden;
+    margin:0;
+    font-family:"Cairo", sans-serif;
+    background:#05060a;
+    color:white;
+    overflow-x:hidden;
 }
 
-/* glow */
-.glow{
-position:fixed;
-width:500px;
-height:500px;
-background:radial-gradient(circle,#7c3aed,transparent 60%);
-top:-150px;
-right:-150px;
-filter:blur(80px);
-opacity:0.7;
+/* 🌌 glow bg */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+    radial-gradient(circle at 20% 20%, rgba(138,92,255,0.25), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(0,200,255,0.15), transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(255,0,120,0.10), transparent 50%);
+    z-index:-1;
 }
 
 /* NAV */
 nav{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 60px;
 }
 
-nav ul{
-display:flex;
-gap:20px;
-list-style:none;
-font-size:14px;
-opacity:0.8;
+nav a{
+    margin:0 10px;
+    color:#aaa;
+    text-decoration:none;
 }
 
-nav ul li:hover{
-color:#7c3aed;
-cursor:pointer;
-}
-
-.btn{
-background:linear-gradient(135deg,#7c3aed,#4f46e5);
-border:none;
-padding:10px 15px;
-border-radius:10px;
-color:white;
-cursor:pointer;
-}
+nav a:hover{color:white}
 
 /* HERO */
 .hero{
-display:grid;
-grid-template-columns:1.3fr 0.7fr;
-padding:60px;
-align-items:center;
-gap:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:40px 80px;
+    gap:40px;
 }
 
 .hero h1{
-font-size:50px;
-line-height:1.2;
+    font-size:70px;
+    background:linear-gradient(90deg,#7b61ff,#00d4ff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin:0;
 }
 
-.hero h1 span{
-background:linear-gradient(90deg,#7c3aed,#60a5fa);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
+.hero p{color:#bbb;max-width:450px}
+
+.btn{
+    padding:12px 18px;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:600;
 }
 
-.hero p{
-opacity:0.7;
-margin-top:10px;
+.primary{
+    background:linear-gradient(90deg,#7b61ff,#00d4ff);
+    color:white;
+}
+
+.secondary{
+    border:1px solid #333;
+    color:white;
 }
 
 /* CARD */
 .card{
-background:rgba(255,255,255,0.05);
-border:1px solid rgba(255,255,255,0.08);
-padding:20px;
-border-radius:20px;
-text-align:center;
-backdrop-filter:blur(10px);
+    width:300px;
+    background:rgba(255,255,255,0.05);
+    border-radius:20px;
+    padding:20px;
+    backdrop-filter:blur(15px);
 }
 
 .avatar{
-width:120px;
-height:120px;
-border-radius:50%;
-border:3px solid #7c3aed;
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:3px solid #7b61ff;
+    overflow:hidden;
+    margin:auto;
 }
 
-/* SOCIAL */
-.social{
-margin-top:15px;
-display:flex;
-flex-direction:column;
-gap:8px;
+.avatar img{width:100%}
+
+.social a{
+    display:block;
+    margin-top:10px;
+    padding:10px;
+    border-radius:10px;
+    background:rgba(255,255,255,0.05);
+    text-decoration:none;
+    color:white;
 }
 
-.social div{
-background:rgba(255,255,255,0.05);
-padding:10px;
-border-radius:10px;
-display:flex;
-justify-content:space-between;
-font-size:13px;
+/* 🎵 music button */
+.music{
+    position:fixed;
+    bottom:20px;
+    left:20px;
 }
 
-/* STATS */
-.stats{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:15px;
-padding:30px 60px;
-}
-
-.stat{
-background:rgba(255,255,255,0.05);
-border:1px solid rgba(255,255,255,0.08);
-padding:20px;
-border-radius:15px;
-text-align:center;
-}
-
-.stat h2{
-color:#7c3aed;
-}
-
-/* ABOUT */
-.about{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:30px;
-padding:60px;
-align-items:center;
-}
-
-.about img{
-width:100%;
-border-radius:15px;
-}
-
-/* SKILLS */
-.skills{
-display:grid;
-grid-template-columns:repeat(5,1fr);
-gap:10px;
-padding:40px 60px;
-}
-
-.skill{
-background:rgba(255,255,255,0.05);
-padding:15px;
-border-radius:12px;
-text-align:center;
-font-size:14px;
-}
-
-/* RESPONSIVE */
-@media(max-width:900px){
-.hero,.about{grid-template-columns:1fr;}
-.stats,.skills{grid-template-columns:1fr 1fr;}
-nav{padding:20px;}
-.hero{padding:30px;}
-.hero h1{font-size:35px;}
+#musicBtn{
+    padding:12px 15px;
+    border-radius:12px;
+    border:none;
+    background:linear-gradient(90deg,#7b61ff,#00d4ff);
+    color:white;
+    cursor:pointer;
+    font-weight:600;
 }
 </style>
 </head>
 
 <body>
 
-<div class="glow"></div>
-
 <nav>
-<h3>اسحاق</h3>
-<ul>
-<li>الرئيسية</li>
-<li>المهارات</li>
-<li>المشاريع</li>
-<li>تواصل</li>
-</ul>
-<button class="btn">تواصل معي</button>
+    <div>
+        <a href="#">الرئيسية</a>
+        <a href="#">عنّي</a>
+        <a href="#">المهارات</a>
+        <a href="#">المشاريع</a>
+    </div>
 </nav>
 
-<section class="hero">
+<div class="hero">
 
 <div>
-<h1>مرحباً 👋 أنا <span>اسحاق</span></h1>
-<p>مطور واجهات حديثة وتصميم مواقع احترافية</p>
-<br>
-<button class="btn">مشاريعي</button>
+<p>👋 مرحباً بك في موقعي</p>
+<h1>اسحاق</h1>
+<p>مطور مواقع أتعلم وأبني مشاريع حديثة.</p>
+
+<a class="btn primary">تواصل معي</a>
+<a class="btn secondary">أعمالي</a>
 </div>
 
 <div class="card">
-<img class="avatar" src="https://via.placeholder.com/120">
+<div class="avatar">
+<img src="https://cdn.discordapp.com/embed/avatars/0.png">
+</div>
 
-<h3>اسحاق</h3>
-<p>Frontend Developer</p>
+<h3 style="text-align:center;">اسحاق</h3>
 
 <div class="social">
-<div><span>Discord</span><span>is7_9</span></div>
-<div><span>Instagram</span><span>dz16d</span></div>
+<a href="#">💬 Discord</a>
+<a href="#">📸 Instagram</a>
+</div>
 </div>
 
 </div>
 
-</section>
+<!-- 🎵 MUSIC PLAYER -->
+<div class="music">
+<button id="musicBtn">🎵 تشغيل الموسيقى</button>
+</div>
 
-<section class="stats">
-<div class="stat"><h2>10+</h2><p>مشاريع</p></div>
-<div class="stat"><h2>200+</h2><p>ساعات</p></div>
-<div class="stat"><h2>1+</h2><p>سنة خبرة</p></div>
-<div class="stat"><h2>100%</h2><p>شغف</p></div>
-</section>
+<audio id="audio" loop>
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a3d6b5.mp3?filename=ambient-piano-amp-strings-10711.mp3" type="audio/mp3">
+</audio>
 
-<section class="about">
+<script>
+const audio = document.getElementById("audio");
+const btn = document.getElementById("musicBtn");
 
-<div>
-<h2>من أنا؟</h2>
-<p>
-أنا مطور مواقع أصمم واجهات حديثة وسريعة وتجربة مستخد
+let playing = false;
+
+btn.onclick = () => {
+    if(!playing){
+        audio.play();
+        btn.innerText = "⏸ إيقاف الموسيقى";
+    } else {
+        audio.pause();
+        btn.innerText = "🎵 تشغيل الموسيقى";
+    }
+    playing = !playing;
+};
+</script>
+
+</body>
+</html>
