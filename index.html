@@ -21,11 +21,9 @@ top:0;
 left:0;
 }
 
-/* 🧑‍💻 MENU */
-.menu{
+/* ===== MENU ===== */
+#menu{
 position:absolute;
-top:0;
-left:0;
 width:100%;
 height:100%;
 display:flex;
@@ -42,22 +40,20 @@ color:#00c2ff;
 text-shadow:0 0 20px #00c2ff;
 }
 
-/* LINKS */
 a{
 display:block;
-margin:5px;
+margin:6px;
 padding:10px;
+width:200px;
 border:1px solid #00c2ff;
 border-radius:10px;
 text-decoration:none;
 color:white;
-width:200px;
 background:rgba(255,255,255,0.05);
 }
 
-/* BUTTON */
 button{
-margin-top:15px;
+margin-top:10px;
 padding:12px 25px;
 border:none;
 border-radius:12px;
@@ -67,8 +63,8 @@ font-weight:bold;
 cursor:pointer;
 }
 
-/* HUD */
-.hud{
+/* ===== HUD ===== */
+#hud{
 position:fixed;
 top:10px;
 left:10px;
@@ -80,8 +76,21 @@ display:none;
 z-index:20;
 }
 
+/* UPGRADE */
+#upgrade{
+position:fixed;
+top:10px;
+right:10px;
+background:rgba(0,0,0,0.5);
+border:1px solid #00c2ff;
+padding:10px;
+border-radius:10px;
+display:none;
+z-index:20;
+}
+
 /* GAME OVER */
-.over{
+#over{
 position:absolute;
 width:100%;
 height:100%;
@@ -102,32 +111,36 @@ font-size:30px;
 <canvas id="game"></canvas>
 
 <!-- 🧑‍💻 MENU -->
-<div class="menu" id="menu">
-
+<div id="menu">
 <h1>🚀 IS7AQ SPACE</h1>
-<p>🇩🇿 Developer from Algeria</p>
 
-<a href="https://discord.com" target="_blank">💬 Discord: is7_9</a>
-<a href="https://instagram.com" target="_blank">📸 Instagram: dz16d</a>
+<a href="#" onclick="alert('Discord: is7_9')">💬 Discord</a>
+<a href="#" onclick="alert('Instagram: dz16d')">📸 Instagram</a>
 
 <button onclick="startGame()">▶ Start Game</button>
 </div>
 
 <!-- HUD -->
-<div class="hud" id="hud">
-❤️ HP: <span id="hp">100</span><br>
-⭐ Score: <span id="score">0</span>
+<div id="hud">
+❤️ Lives: <span id="lives">3</span><br>
+⭐ Score: <span id="score">0</span><br>
+🔫 Power: <span id="power">1</span>
+</div>
+
+<!-- UPGRADE -->
+<div id="upgrade">
+<button onclick="upgrade()">🔫 Upgrade (10⭐)</button>
 </div>
 
 <!-- GAME OVER -->
-<div class="over" id="over">
+<div id="over">
 💥 GAME OVER<br>
 <button onclick="location.reload()">Restart</button>
 </div>
 
 <script>
 
-/* 🌌 STAR BACKGROUND */
+/* 🌌 BACKGROUND */
 const bg=document.getElementById("bg");
 const b=bg.getContext("2d");
 
@@ -159,18 +172,20 @@ c.width=innerWidth;
 c.height=innerHeight;
 
 /* PLAYER */
-let ship={x:c.width/2,y:c.height-120,hp:100};
+let ship={x:c.width/2,y:c.height-120};
 
 let bullets=[];
 let enemies=[];
-let boss=null;
 
+let lives=3;
 let score=0;
+let power=1;
 
-/* START GAME */
+/* START GAME → SWITCH SCREENS */
 function startGame(){
 document.getElementById("menu").style.display="none";
 document.getElementById("hud").style.display="block";
+document.getElementById("upgrade").style.display="block";
 }
 
 /* CONTROL */
@@ -183,27 +198,37 @@ window.addEventListener("click",()=>{
 bullets.push({x:ship.x,y:ship.y});
 });
 
-/* ✈️ ENEMY FIGHTER JETS */
+/* ENEMIES */
 setInterval(()=>{
 enemies.push({
 x:Math.random()*c.width,
-y:-50,
-speed:3,
-type:Math.floor(Math.random()*3)
+y:-20,
+speed:2+Math.random()*2
 });
 },500);
 
-/* BOSS */
-setTimeout(()=>{
-boss={x:c.width/2,y:80,hp:100};
-},15000);
+/* UPGRADE */
+function upgrade(){
+if(score>=10){
+score-=10;
+power++;
+update();
+}
+}
+
+/* UPDATE */
+function update(){
+document.getElementById("lives").innerText=lives;
+document.getElementById("score").innerText=score;
+document.getElementById("power").innerText=power;
+}
 
 /* LOOP */
 function loop(){
 
 g.clearRect(0,0,c.width,c.height);
 
-/* 🚀 PLAYER */
+/* SHIP */
 g.fillStyle="#00c2ff";
 g.beginPath();
 g.moveTo(ship.x,ship.y);
@@ -211,7 +236,7 @@ g.lineTo(ship.x-15,ship.y+30);
 g.lineTo(ship.x+15,ship.y+30);
 g.fill();
 
-/* bullets */
+/* BULLETS */
 for(let i=bullets.length-1;i>=0;i--){
 let b=bullets[i];
 b.y-=10;
@@ -220,69 +245,38 @@ g.fillStyle="white";
 g.fillRect(b.x,b.y,3,10);
 }
 
-/* ✈️ ENEMY JETS */
+/* ENEMIES */
 for(let i=enemies.length-1;i>=0;i--){
 let e=enemies[i];
 e.y+=e.speed;
 
-/* شكل طائرة حربية */
-g.fillStyle = e.type===0 ? "red" : e.type===1 ? "orange" : "purple";
+g.fillStyle="red";
+g.fillRect(e.x,e.y,25,20);
 
-/* جسم الطائرة */
-g.fillRect(e.x,e.y,30,10);
-
-/* جناحات */
-g.fillRect(e.x+10,e.y-5,10,5);
-g.fillRect(e.x+10,e.y+10,10,5);
-
-/* hit bullets */
+/* HIT */
 for(let j=bullets.length-1;j>=0;j--){
 let b=bullets[j];
 
-if(Math.abs(b.x-e.x)<25 && Math.abs(b.y-e.y)<20){
+if(Math.abs(b.x-e.x)<20 && Math.abs(b.y-e.y)<20){
 
 enemies.splice(i,1);
 bullets.splice(j,1);
 
 score++;
-document.getElementById("score").innerText=score;
+update();
 break;
 }
 }
 
-/* collision player */
+/* PLAYER HIT */
 if(e.y>ship.y && Math.abs(e.x-ship.x)<25){
-ship.hp-=20;
-document.getElementById("hp").innerText=ship.hp;
 
-if(ship.hp<=0){
+enemies.splice(i,1);
+lives--;
+update();
+
+if(lives<=0){
 document.getElementById("over").style.display="flex";
-}
-}
-}
-
-/* 👑 BOSS */
-if(boss){
-
-g.fillStyle="purple";
-g.fillRect(boss.x,boss.y,120,50);
-
-/* movement */
-boss.x+=Math.sin(Date.now()/400)*4;
-
-/* hit */
-for(let j=bullets.length-1;j>=0;j--){
-let b=bullets[j];
-
-if(b.x>boss.x && b.x<boss.x+120 && b.y<boss.y+50){
-boss.hp--;
-bullets.splice(j,1);
-
-if(boss.hp<=0){
-score+=50;
-boss=null;
-document.getElementById("score").innerText=score;
-}
 }
 }
 }
