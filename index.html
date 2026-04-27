@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Game Hub Fixed</title>
+<title>My Space Site</title>
 
 <style>
 body{
 margin:0;
-background:black;
-overflow:hidden;
 font-family:Arial;
+background:black;
 color:white;
+overflow:hidden;
 }
 
 canvas{
@@ -20,141 +20,201 @@ top:0;
 left:0;
 }
 
-.menu{
+/* 🧑‍💻 التعريف */
+.card{
 position:absolute;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
+background:rgba(255,255,255,0.06);
+border:1px solid #00c2ff;
+padding:20px;
+border-radius:20px;
+width:90%;
+max-width:350px;
 text-align:center;
+backdrop-filter:blur(10px);
+z-index:10;
 }
 
 button{
-width:200px;
-margin:5px;
-padding:10px;
+width:100%;
+margin-top:10px;
+padding:12px;
 border:none;
-border-radius:10px;
+border-radius:12px;
 background:#00c2ff;
 color:white;
+cursor:pointer;
+}
+
+/* 🎮 HUD */
+.hud{
+position:fixed;
+top:10px;
+left:10px;
+background:rgba(0,0,0,0.5);
+padding:10px;
+border:1px solid #00c2ff;
+border-radius:10px;
+display:none;
+z-index:20;
+}
+
+/* 🎮 Canvas */
+#game{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="game"></canvas>
+<canvas id="bg"></canvas>
 
-<div class="menu" id="menu">
-<h2>🎮 Game Hub</h2>
+<!-- 🧑‍💻 -->
+<div class="card" id="menu">
+<h2>👨‍💻 اسحاق</h2>
+<p>🇩🇿 من الجزائر</p>
+<p>💻 أحب البرمجة وصناعة الألعاب</p>
 
-<button onclick="start('snake')">🐍 Snake</button>
-<button onclick="start('break')">🧱 Break</button>
-<button onclick="start('space')">🚀 Space</button>
-
+<button onclick="startGame()">🚀 تشغيل لعبة الفضاء</button>
 </div>
+
+<!-- ⭐ HUD -->
+<div class="hud" id="hud">
+⭐ Score: <span id="score">0</span>
+</div>
+
+<!-- 🎮 GAME -->
+<canvas id="game"></canvas>
 
 <script>
 
-const c=document.getElementById("game");
-const ctx=c.getContext("2d");
+/* 🌌 الخلفية */
+const bg=document.getElementById("bg");
+const bctx=bg.getContext("2d");
 
-c.width=innerWidth;
-c.height=innerHeight;
+bg.width=innerWidth;
+bg.height=innerHeight;
 
-let mode="menu";
-
-/* التحكم */
-let x=c.width/2;
-
-/* ---------- MENU ---------- */
-function start(g){
-document.getElementById("menu").style.display="none";
-mode=g;
-}
-
-/* ---------- SNAKE ---------- */
-let snake=[{x:100,y:100}];
-let dir="RIGHT";
-
-window.addEventListener("keydown",e=>{
-if(e.key==="ArrowRight")dir="RIGHT";
-if(e.key==="ArrowLeft")dir="LEFT";
-if(e.key==="ArrowUp")dir="UP";
-if(e.key==="ArrowDown")dir="DOWN";
+let stars=[];
+for(let i=0;i<120;i++){
+stars.push({
+x:Math.random()*bg.width,
+y:Math.random()*bg.height
 });
-
-function snakeGame(){
-
-let head={...snake[0]};
-
-if(dir==="RIGHT")head.x+=20;
-if(dir==="LEFT")head.x-=20;
-if(dir==="UP")head.y-=20;
-if(dir==="DOWN")head.y+=20;
-
-snake.unshift(head);
-snake.pop();
-
-for(let i=0;i<snake.length;i++){
-ctx.fillStyle="white";
-ctx.fillRect(snake[i].x,snake[i].y,20,20);
-}
 }
 
-/* ---------- BREAK ---------- */
-let ball={x:200,y:200,vx:4,vy:4};
-
-function breakGame(){
-
-ball.x+=ball.vx;
-ball.y+=ball.vy;
-
-if(ball.x<0||ball.x>c.width)ball.vx*=-1;
-if(ball.y<0||ball.y>c.height)ball.vy*=-1;
-
-ctx.fillStyle="red";
-ctx.beginPath();
-ctx.arc(ball.x,ball.y,10,0,Math.PI*2);
-ctx.fill();
-
-ctx.fillStyle="#00c2ff";
-ctx.fillRect(x,c.height-50,100,10);
+function drawBg(){
+bctx.clearRect(0,0,bg.width,bg.height);
+bctx.fillStyle="white";
+stars.forEach(s=>{
+bctx.fillRect(s.x,s.y,1.5,1.5);
+});
 }
+setInterval(drawBg,50);
 
-/* ---------- SPACE ---------- */
+/* 🎮 GAME */
+const game=document.getElementById("game");
+const g=game.getContext("2d");
+
+game.width=innerWidth;
+game.height=innerHeight;
+
+/* player */
+let ship={x:game.width/2,y:game.height-120};
+
 let bullets=[];
+let enemies=[];
 
-window.addEventListener("click",()=>{
-if(mode==="space"){
-bullets.push({x:x,y:c.height-80});
-}
-});
+let score=0;
 
-function spaceGame(){
-
-ctx.fillStyle="#00c2ff";
-ctx.fillRect(x,c.height-100,30,20);
-
-for(let b of bullets){
-b.y-=6;
-ctx.fillStyle="white";
-ctx.fillRect(b.x,b.y,3,10);
-}
+/* 🚀 start */
+function startGame(){
+document.getElementById("menu").style.display="none";
+document.getElementById("hud").style.display="block";
+game.style.display="block";
 }
 
-/* ---------- CONTROL ---------- */
+/* 🎯 control */
 window.addEventListener("mousemove",e=>{
-x=e.clientX;
+ship.x=e.clientX;
 });
 
-/* ---------- LOOP ---------- */
+/* 🔫 shoot */
+window.addEventListener("click",()=>{
+if(game.style.display==="block"){
+bullets.push({x:ship.x,y:ship.y});
+}
+});
+
+/* 🛸 enemies */
+setInterval(()=>{
+if(game.style.display==="block"){
+enemies.push({
+x:Math.random()*game.width,
+y:-20,
+s:2
+});
+}
+},800);
+
+/* 🎮 loop */
 function loop(){
 
-ctx.clearRect(0,0,c.width,c.height);
+if(game.style.display==="block"){
 
-if(mode==="snake")snakeGame();
-if(mode==="break")breakGame();
-if(mode==="space")spaceGame();
+g.clearRect(0,0,game.width,game.height);
+
+/* 🚀 ship */
+g.fillStyle="#00c2ff";
+g.fillRect(ship.x,ship.y,30,20);
+
+/* bullets */
+for(let i=bullets.length-1;i>=0;i--){
+let b=bullets[i];
+b.y-=7;
+
+g.fillStyle="white";
+g.fillRect(b.x,b.y,3,10);
+}
+
+/* enemies */
+for(let i=enemies.length-1;i>=0;i--){
+let e=enemies[i];
+e.y+=e.s;
+
+g.fillStyle="red";
+g.fillRect(e.x,e.y,20,20);
+
+/* collision */
+for(let j=bullets.length-1;j>=0;j--){
+let b=bullets[j];
+
+if(Math.abs(b.x-e.x)<20 && Math.abs(b.y-e.y)<20){
+
+enemies.splice(i,1);
+bullets.splice(j,1);
+
+score++;
+document.getElementById("score").innerText=score;
+break;
+}
+}
+
+/* game over */
+if(e.y>game.height-100 && Math.abs(e.x-ship.x)<20){
+alert("💥 Game Over | Score: "+score);
+location.reload();
+}
+}
+}
 
 requestAnimationFrame(loop);
 }
