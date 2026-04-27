@@ -1,365 +1,320 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>اسحاق | Portfolio</title>
+import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+export default function App() {
+  const canvasRef = useRef(null);
+  const auraRef = useRef(null);
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif;}
+  /* ===== Stars ===== */
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
 
-body{
-background:#05060a;
-color:#fff;
-overflow-x:hidden;
+    let w = (canvas.width = window.innerWidth);
+    let h = (canvas.height = window.innerHeight);
+
+    const stars = Array.from({ length: 150 }).map(() => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      size: Math.random() * 2,
+      speed: Math.random() * 0.6 + 0.2,
+    }));
+
+    function animate() {
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = "white";
+
+      stars.forEach((s) => {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        s.y += s.speed;
+        if (s.y > h) {
+          s.y = 0;
+          s.x = Math.random() * w;
+        }
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener("resize", () => {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    });
+  }, []);
+
+  /* ===== Aura Cursor ===== */
+  useEffect(() => {
+    let x = 0, y = 0, mx = 0, my = 0;
+
+    const move = (e) => {
+      mx = e.clientX;
+      my = e.clientY;
+    };
+
+    const animate = () => {
+      x += (mx - x) * 0.08;
+      y += (my - y) * 0.08;
+
+      auraRef.current.style.transform =
+        `translate(${x - 100}px, ${y - 100}px)`;
+
+      requestAnimationFrame(animate);
+    };
+
+    window.addEventListener("mousemove", move);
+    animate();
+  }, []);
+
+  return (
+    <div style={styles.body}>
+
+      {/* Stars */}
+      <canvas ref={canvasRef} style={styles.canvas}></canvas>
+
+      {/* Aura */}
+      <div ref={auraRef} style={styles.aura}></div>
+
+      {/* Glow */}
+      <div style={styles.glow}></div>
+
+      {/* NAV */}
+      <motion.nav
+        style={styles.nav}
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        <h3>اسحاق</h3>
+        <ul style={styles.ul}>
+          <li>الرئيسية</li>
+          <li>المشاريع</li>
+          <li>تواصل</li>
+        </ul>
+        <button style={styles.btn}>تواصل معي</button>
+      </motion.nav>
+
+      {/* HERO */}
+      <section style={styles.hero}>
+
+        <motion.div
+          initial={{ x: -80, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.7 }}
+        >
+          <h1 style={styles.h1}>
+            مرحباً 👋 أنا <span style={styles.span}>اسحاق</span>
+          </h1>
+          <p>مطوّر مواقع ومصمم واجهات حديثة</p>
+
+          <div style={styles.row}>
+            <button style={styles.btn}>مشاريعي</button>
+            <button style={styles.outline}>تحميل CV</button>
+          </div>
+        </motion.div>
+
+        <motion.div
+          style={styles.card}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          whileHover={{ scale: 1.05 }}
+        >
+          <img
+            style={styles.img}
+            src="https://cdn.discordapp.com/avatars/1200879352875864134/f8dcf7c4b6cef83644eb44beed2fabf3.webp?size=512"
+          />
+          <h3>اسحاق</h3>
+          <p>Frontend Developer</p>
+        </motion.div>
+
+      </section>
+
+      {/* ABOUT */}
+      <motion.section
+        style={styles.about}
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+      >
+        <div>
+          <h2>من أنا؟</h2>
+          <p>مطور واجهات متخصص في بناء مواقع حديثة وسريعة.</p>
+        </div>
+
+        <img
+          style={styles.aboutImg}
+          src="https://images.unsplash.com/photo-1498050108023-c5249f4df085"
+        />
+      </motion.section>
+
+      {/* PROJECTS */}
+      <section style={styles.projects}>
+        <h2>مشاريعي</h2>
+
+        <div style={styles.grid}>
+
+          {[1,2,3].map((item, i) => (
+            <motion.div
+              key={i}
+              style={styles.project}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.4, delay: i * 0.1 }}
+              viewport={{ once: true }}
+            >
+              <div style={styles.projectImg}></div>
+              <h3>مشروع {i + 1}</h3>
+              <p>تصميم احترافي وحديث.</p>
+            </motion.div>
+          ))}
+
+        </div>
+      </section>
+
+      {/* MUSIC */}
+      <audio autoPlay loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8b3d3d2d1.mp3" />
+      </audio>
+
+    </div>
+  );
 }
 
-/* النجوم */
-.stars{
-position:fixed;
-width:100%;
-height:100%;
-top:0;
-left:0;
-z-index:0;
-overflow:hidden;
-}
+/* ===== Styles ===== */
+const styles = {
+  body: {
+    background: "#05060a",
+    color: "white",
+    fontFamily: "sans-serif",
+    minHeight: "100vh",
+    overflowX: "hidden",
+  },
 
-.star{
-position:absolute;
-width:2px;
-height:2px;
-background:white;
-border-radius:50%;
-opacity:0.5;
-animation:moveStars linear infinite;
-}
+  canvas: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+  },
 
-@keyframes moveStars{
-from{transform:translateY(0);}
-to{transform:translateY(100vh);}
-}
+  glow: {
+    position: "fixed",
+    width: 600,
+    height: 600,
+    background: "radial-gradient(circle,#7c3aed55,transparent 60%)",
+    filter: "blur(120px)",
+    top: -200,
+    right: -200,
+  },
 
-/* الخلفية */
-.bg-glow{
-position:fixed;
-top:-200px;
-right:-200px;
-width:600px;
-height:600px;
-background:radial-gradient(circle,#6d28d9,transparent 60%);
-filter:blur(120px);
-z-index:0;
-}
+  aura: {
+    position: "fixed",
+    width: 200,
+    height: 200,
+    borderRadius: "50%",
+    background:
+      "radial-gradient(circle,#7c3aed55,#60a5fa33,transparent 70%)",
+    filter: "blur(25px)",
+    pointerEvents: "none",
+    zIndex: 999,
+  },
 
-/* NAV */
-nav{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 50px;
-position:relative;
-z-index:10;
-}
+  nav: {
+    display: "flex",
+    justifyContent: "space-between",
+    padding: 20,
+    position: "relative",
+    zIndex: 10,
+  },
 
-nav ul{
-display:flex;
-gap:25px;
-list-style:none;
-font-size:14px;
-opacity:.8;
-}
+  ul: {
+    display: "flex",
+    gap: 20,
+    listStyle: "none",
+  },
 
-nav ul li:hover{color:#a78bfa;cursor:pointer;}
+  hero: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    padding: 40,
+    zIndex: 2,
+    position: "relative",
+  },
 
-.btn{
-background:linear-gradient(135deg,#7c3aed,#4f46e5);
-padding:10px 18px;
-border-radius:12px;
-font-size:14px;
-cursor:pointer;
-}
+  h1: { fontSize: 50 },
 
-.btn-outline{
-border:1px solid #7c3aed;
-padding:10px 15px;
-border-radius:12px;
-cursor:pointer;
-}
+  span: { color: "#a78bfa" },
 
-/* HERO */
-.hero{
-display:grid;
-grid-template-columns:1.2fr .8fr;
-align-items:center;
-padding:40px 70px;
-position:relative;
-z-index:2;
-}
+  row: { display: "flex", gap: 10, marginTop: 20 },
 
-.hero h1{
-font-size:60px;
-font-weight:800;
-line-height:1.2;
-}
+  btn: {
+    background: "#7c3aed",
+    border: "none",
+    padding: "10px 15px",
+    color: "white",
+    borderRadius: 10,
+    cursor: "pointer",
+  },
 
-.hero h1 span{
-background:linear-gradient(90deg,#a78bfa,#60a5fa);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-}
+  outline: {
+    border: "1px solid #7c3aed",
+    padding: "10px 15px",
+    borderRadius: 10,
+    background: "transparent",
+    color: "white",
+  },
 
-.hero p{
-margin-top:15px;
-opacity:.7;
-font-size:15px;
-}
+  card: {
+    background: "rgba(255,255,255,0.05)",
+    padding: 20,
+    borderRadius: 20,
+    textAlign: "center",
+  },
 
-.hero-buttons{
-display:flex;
-gap:15px;
-margin-top:25px;
-}
+  img: {
+    width: 130,
+    height: 130,
+    borderRadius: "50%",
+    border: "3px solid #7c3aed",
+  },
 
-/* CARD */
-.card{
-background:rgba(255,255,255,0.05);
-border:1px solid rgba(255,255,255,0.08);
-backdrop-filter:blur(12px);
-border-radius:25px;
-padding:25px;
-text-align:center;
-box-shadow:0 0 40px rgba(124,58,237,0.15);
-}
+  about: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    padding: 40,
+  },
 
-.profile-img{
-width:130px;
-height:130px;
-border-radius:50%;
-border:3px solid #7c3aed;
-object-fit:cover;
-}
+  aboutImg: {
+    width: "100%",
+    borderRadius: 20,
+  },
 
-.status{
-margin-top:10px;
-font-size:13px;
-color:#a78bfa;
-}
+  projects: {
+    padding: 40,
+  },
 
-.dot{
-width:10px;
-height:10px;
-background:#22c55e;
-border-radius:50%;
-display:inline-block;
-margin-left:5px;
-}
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))",
+    gap: 20,
+  },
 
-.social{
-margin-top:20px;
-display:flex;
-flex-direction:column;
-gap:10px;
-}
+  project: {
+    background: "rgba(255,255,255,0.05)",
+    padding: 20,
+    borderRadius: 15,
+  },
 
-.social div{
-display:flex;
-justify-content:space-between;
-background:rgba(255,255,255,0.06);
-padding:10px;
-border-radius:12px;
-font-size:13px;
-}
-
-/* ABOUT */
-.about{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:30px;
-padding:60px 70px;
-align-items:center;
-}
-
-.about img{
-width:100%;
-border-radius:20px;
-opacity:.9;
-}
-
-/* PROJECTS */
-.projects{
-padding:60px 70px;
-position:relative;
-z-index:2;
-}
-
-.section-title{
-font-size:28px;
-margin-bottom:25px;
-}
-
-.projects-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
-}
-
-.project-card{
-background:rgba(255,255,255,0.05);
-border:1px solid rgba(255,255,255,0.08);
-border-radius:20px;
-padding:20px;
-transition:0.3s;
-backdrop-filter:blur(10px);
-}
-
-.project-card:hover{
-transform:translateY(-8px);
-border-color:#7c3aed;
-box-shadow:0 10px 30px rgba(124,58,237,0.2);
-}
-
-.project-img{
-height:140px;
-border-radius:15px;
-background:linear-gradient(135deg,#7c3aed,#60a5fa);
-margin-bottom:15px;
-}
-
-.project-card h3{
-margin-bottom:10px;
-font-size:18px;
-}
-
-.project-card p{
-font-size:13px;
-opacity:0.7;
-margin-bottom:15px;
-}
-
-.project-card a{
-color:#a78bfa;
-text-decoration:none;
-font-size:13px;
-}
-
-/* MUSIC */
-audio{
-display:none;
-}
-
-@media(max-width:900px){
-.hero,.about{grid-template-columns:1fr;}
-nav{padding:20px;}
-.hero{padding:20px;}
-}
-</style>
-</head>
-
-<body>
-
-<div class="stars" id="stars"></div>
-<div class="bg-glow"></div>
-
-<nav>
-<h3>اسحاق</h3>
-<ul>
-<li>الرئيسية</li>
-<li>المشاريع</li>
-<li>تواصل</li>
-</ul>
-<div class="btn">تواصل معي</div>
-</nav>
-
-<section class="hero">
-<div>
-<h1>مرحباً 👋 أنا <span>اسحاق</span></h1>
-<p>مطوّر مواقع ومصمم واجهات حديثة احترافية</p>
-
-<div class="hero-buttons">
-<div class="btn">مشاريعي</div>
-<div class="btn-outline">تحميل CV</div>
-</div>
-</div>
-
-<div class="card">
-<img class="profile-img"
-src="https://cdn.discordapp.com/avatars/1200879352875864134/f8dcf7c4b6cef83644eb44beed2fabf3.webp?size=256">
-
-<h3 style="margin-top:10px;">اسحاق</h3>
-<div class="status">Frontend Developer <span class="dot"></span></div>
-
-<div class="social">
-<div><span>Discord</span><span>is7_9</span></div>
-<div><span>Instagram</span><span>dz16d</span></div>
-</div>
-</div>
-</section>
-
-<section class="about">
-<div>
-<h2>من أنا؟</h2>
-<p>أنا مطور واجهات متخصص في بناء مواقع حديثة سريعة ومتجاوبة بتصميم احترافي وتجربة مستخدم عالية.</p>
-</div>
-
-<img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085">
-</section>
-
-<!-- PROJECTS -->
-<section class="projects">
-<h2 class="section-title">مشاريعي</h2>
-
-<div class="projects-grid">
-
-<div class="project-card">
-<div class="project-img"></div>
-<h3>موقع متجر إلكتروني</h3>
-<p>تصميم متجر حديث متجاوب مع تجربة مستخدم ممتازة.</p>
-<a href="#">عرض المشروع</a>
-</div>
-
-<div class="project-card">
-<div class="project-img"></div>
-<h3>بورتفوليو شخصي</h3>
-<p>موقع شخصي بتصميم عصري مع تأثيرات جميلة.</p>
-<a href="#">عرض المشروع</a>
-</div>
-
-<div class="project-card">
-<div class="project-img"></div>
-<h3>Dashboard لوحة تحكم</h3>
-<p>واجهة إدارة بيانات احترافية وسهلة الاستخدام.</p>
-<a href="#">عرض المشروع</a>
-</div>
-
-</div>
-</section>
-
-<!-- MUSIC -->
-<audio id="bg" autoplay loop>
-<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8b3d3d2d1.mp3">
-</audio>
-
-<script>
-// نجوم
-for(let i=0;i<80;i++){
-const star=document.createElement("div");
-star.className="star";
-star.style.left=Math.random()*100+"vw";
-star.style.top=Math.random()*-100+"vh";
-star.style.animationDuration=(Math.random()*5+3)+"s";
-document.getElementById("stars").appendChild(star);
-}
-
-// موسيقى
-const audio=document.getElementById("bg");
-window.addEventListener("load",()=>{
-audio.volume=0.4;
-audio.play().catch(()=>{});
-});
-</script>
-
-</body>
-</html>
+  projectImg: {
+    height: 120,
+    background: "linear-gradient(135deg,#7c3aed,#60a5fa)",
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+};
