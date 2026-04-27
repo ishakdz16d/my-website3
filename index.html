@@ -3,18 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Is7aq Full Site</title>
+<title>Is7aq Game Hub</title>
 
 <style>
 body {
   margin: 0;
-  overflow: hidden;
   font-family: Arial;
   background: black;
   color: white;
+  overflow: hidden;
 }
 
-/* 🌌 الخلفية */
 canvas {
   position: fixed;
   top: 0;
@@ -24,77 +23,54 @@ canvas {
 /* 🧑‍💻 الكارد */
 .card {
   position: absolute;
-  top: 30%;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 10;
-
   background: rgba(255,255,255,0.06);
   border: 1px solid #00c2ff;
-  padding: 20px;
+  padding: 15px;
   border-radius: 20px;
   width: 90%;
-  max-width: 360px;
+  max-width: 350px;
   text-align: center;
   backdrop-filter: blur(10px);
-}
-
-button {
-  margin-top: 10px;
-  padding: 12px;
-  width: 100%;
-  border: none;
-  border-radius: 12px;
-  background: #00c2ff;
-  color: white;
-  cursor: pointer;
-}
-
-/* 🎮 قائمة الألعاب */
-#menu {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.9);
-  z-index: 20;
-  text-align: center;
-  padding-top: 80px;
-}
-
-.gameBtn {
-  width: 80%;
-  max-width: 300px;
-  margin: 10px auto;
-  padding: 12px;
-  border-radius: 12px;
-  background: #00c2ff;
-  border: none;
-  color: white;
+  z-index: 10;
 }
 
 /* 🎮 اللعبة */
 #game {
-  display: none;
   position: fixed;
-  top: 0;
+  bottom: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  z-index: 30;
+  height: 250px;
+  z-index: 5;
+  background: rgba(0,0,0,0.2);
+  border-top: 1px solid #00c2ff;
 }
 
-.back {
+/* 🛒 المتجر */
+.shop {
   position: fixed;
-  top: 10px;
   right: 10px;
-  z-index: 40;
+  top: 10px;
+  width: 180px;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid #00c2ff;
   padding: 10px;
-  background: #00c2ff;
+  border-radius: 15px;
+  z-index: 20;
+}
+
+button {
+  width: 100%;
+  margin-top: 5px;
+  padding: 8px;
   border: none;
   border-radius: 10px;
+  background: #00c2ff;
+  color: white;
+  cursor: pointer;
 }
 </style>
 </head>
@@ -107,29 +83,24 @@ button {
 <div class="card">
   <h2>👨‍💻 اسحاق</h2>
   <p>🇩🇿 من الجزائر</p>
-  <p>💻 أحب البرمجة وصناعة المواقع</p>
-
-  <button onclick="window.open('https://discord.com','_blank')">💬 Discord</button>
-  <button onclick="window.open('https://instagram.com','_blank')">📸 Instagram</button>
-
-  <button onclick="openMenu()">🎮 الألعاب</button>
+  <p>💻 Game + Web Developer</p>
 </div>
 
-<!-- 🎮 قائمة الألعاب -->
-<div id="menu">
-  <h2>🎮 قائمة الألعاب</h2>
+<!-- 🛒 المتجر -->
+<div class="shop">
+  🛒 Shop<br>
+  ⭐ Points: <span id="points">0</span><br>
+  💥 Damage: <span id="damage">1</span>
 
-  <button class="gameBtn" onclick="startGame()">🚀 لعبة الفضاء</button>
-  <button class="gameBtn" onclick="closeMenu()">⬅ رجوع</button>
+  <button onclick="buyDamage()">Upgrade +1 (10⭐)</button>
 </div>
 
 <!-- 🎮 اللعبة -->
 <canvas id="game"></canvas>
-<button class="back" onclick="exitGame()">⬅ خروج</button>
 
 <script>
 
-/* 🌌 نجوم */
+/* 🌌 خلفية */
 const bg = document.getElementById("bg");
 const ctx = bg.getContext("2d");
 
@@ -137,112 +108,115 @@ bg.width = window.innerWidth;
 bg.height = window.innerHeight;
 
 let stars = [];
-
 for(let i=0;i<120;i++){
-  stars.push({
-    x: Math.random()*bg.width,
-    y: Math.random()*bg.height
-  });
+  stars.push({x:Math.random()*bg.width,y:Math.random()*bg.height});
 }
 
-function draw(){
+function drawBg(){
   ctx.clearRect(0,0,bg.width,bg.height);
   ctx.fillStyle="white";
-
   stars.forEach(s=>{
     ctx.fillRect(s.x,s.y,1.5,1.5);
   });
 }
+setInterval(drawBg,50);
 
-setInterval(draw,50);
-
-/* 🎮 menu */
-function openMenu(){
-  document.getElementById("menu").style.display="block";
-}
-function closeMenu(){
-  document.getElementById("menu").style.display="none";
-}
-
-/* 🚀 لعبة */
+/* 🎮 اللعبة */
 const game = document.getElementById("game");
 const g = game.getContext("2d");
 
 game.width = window.innerWidth;
-game.height = window.innerHeight;
+game.height = 250;
 
 let x = game.width/2;
 let bullets = [];
 let enemies = [];
 
-function startGame(){
-  document.getElementById("menu").style.display="none";
-  game.style.display="block";
-}
+let points = 0;
+let damage = 1;
 
-/* خروج */
-function exitGame(){
-  game.style.display="none";
-}
-
-/* تحكم */
+/* التحكم */
 window.addEventListener("mousemove",e=>x=e.clientX);
 window.addEventListener("touchmove",e=>x=e.touches[0].clientX);
 
 /* إطلاق */
 window.addEventListener("click",()=>{
-  if(game.style.display==="block"){
-    bullets.push({x:x,y:game.height-60});
-  }
+  bullets.push({x:x,y:game.height-60});
 });
 
 /* أعداء */
 setInterval(()=>{
-  if(game.style.display==="block"){
-    enemies.push({
-      x: Math.random()*game.width,
-      y: 0,
-      speed: 2
-    });
-  }
+  enemies.push({
+    x: Math.random()*game.width,
+    y: 0,
+    speed: 2
+  });
 },800);
 
-/* تحديث */
+/* 🛒 متجر */
+function buyDamage(){
+  if(points >= 10){
+    points -= 10;
+    damage++;
+    updateUI();
+  }
+}
+
+/* تحديث UI */
+function updateUI(){
+  document.getElementById("points").innerText = points;
+  document.getElementById("damage").innerText = damage;
+}
+
+/* اللعبة */
 function update(){
 
-  if(game.style.display==="block"){
+  g.clearRect(0,0,game.width,game.height);
 
-    g.clearRect(0,0,game.width,game.height);
+  /* سفينة */
+  g.fillStyle="#00c2ff";
+  g.fillRect(x,game.height-80,30,20);
 
-    /* سفينة */
-    g.fillStyle="#00c2ff";
-    g.fillRect(x,game.height-80,30,20);
+  /* bullets */
+  for(let i=0;i<bullets.length;i++){
+    let b = bullets[i];
+    b.y -= 6;
 
-    /* bullets */
-    for(let i=0;i<bullets.length;i++){
-      let b = bullets[i];
-      b.y -= 6;
+    g.fillStyle="white";
+    g.fillRect(b.x,b.y,3,10);
 
-      g.fillStyle="white";
-      g.fillRect(b.x,b.y,3,10);
+    if(b.y<0) bullets.splice(i,1);
+  }
 
-      if(b.y<0) bullets.splice(i,1);
+  /* enemies */
+  for(let i=0;i<enemies.length;i++){
+    let e = enemies[i];
+    e.y += e.speed;
+
+    g.fillStyle="red";
+    g.fillRect(e.x,e.y,20,20);
+
+    /* تصادم */
+    if(e.y>160 && Math.abs(e.x-x)<25){
+      alert("💥 Game Over | Points: "+points);
+      location.reload();
     }
 
-    /* enemies */
-    for(let i=0;i<enemies.length;i++){
-      let e = enemies[i];
-      e.y += e.speed;
+    /* bullets hit */
+    for(let j=0;j<bullets.length;j++){
+      let b = bullets[j];
 
-      g.fillStyle="red";
-      g.fillRect(e.x,e.y,20,20);
+      if(Math.abs(b.x-e.x)<25 && Math.abs(b.y-e.y)<25){
 
-      if(e.y>160 && Math.abs(e.x-x)<25){
-        alert("💥 Game Over");
-        location.reload();
+        enemies.splice(i,1);
+        bullets.splice(j,1);
+
+        points += damage; // ⭐ نقاط حسب الضرر
+        updateUI();
+
+        break;
       }
     }
-
   }
 
   requestAnimationFrame(update);
