@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apple Vision Style Portfolio</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #000;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* 🌌 WebGL canvas */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -2;
+}
+
+/* 🖱️ cursor glow */
+#cursor {
+    position: fixed;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 60%);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: screen;
+}
+
+/* 🧭 sections */
+section {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 10vw;
+}
+
+/* 🍏 Apple typography style */
+h1 {
+    font-size: clamp(50px, 7vw, 120px);
+    font-weight: 500;
+    letter-spacing: -3px;
+    margin: 0;
+}
+
+p {
+    max-width: 650px;
+    font-size: 20px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+    margin-top: 20px;
+}
+
+/* glass card */
+.glass {
+    padding: 18px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(20px);
+}
+</style>
+</head>
+
+<body>
+
+<div id="cursor"></div>
+<canvas id="scene"></canvas>
+
+<!-- HERO -->
+<section>
+    <h1>Vision Experience</h1>
+    <p class="glass">Immersive Apple-inspired web experience with depth, motion, and cinematic feel.</p>
+</section>
+
+<!-- DESIGN -->
+<section>
+    <h1>Design</h1>
+    <p>Minimal UI, precise spacing, and typography-first system like Apple products.</p>
+</section>
+
+<!-- 3D -->
+<section>
+    <h1>3D Engine</h1>
+    <p>Real-time WebGL rendering with lighting, particles, and smooth camera motion.</p>
+</section>
+
+<!-- ABOUT -->
+<section>
+    <h1>Is7_9</h1>
+    <p>Creative developer building immersive digital experiences.</p>
+</section>
+
+<!-- LIBRARIES -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<script>
+
+/* =========================
+   🌌 THREE.JS VISION CORE
+========================= */
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0x000000, 2, 10);
+
+const camera = new THREE.PerspectiveCamera(
+    70,
+    innerWidth/innerHeight,
+    0.1,
+    1000
+);
+
+const renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById("scene"),
+    antialias: true
+});
+
+renderer.setSize(innerWidth, innerHeight);
+camera.position.z = 4;
+
+/* 🎯 main object (Apple focal point) */
+const geometry = new THREE.IcosahedronGeometry(1.2, 1);
+const material = new THREE.MeshStandardMaterial({
+    color: 0x88ccff,
+    metalness: 0.7,
+    roughness: 0.25
+});
+
+const object = new THREE.Mesh(geometry, material);
+scene.add(object);
+
+/* 💡 lights */
+scene.add(new THREE.AmbientLight(0xffffff, 0.2));
+
+const light = new THREE.PointLight(0xffffff, 1.2);
+light.position.set(2,2,2);
+scene.add(light);
+
+/* 🌠 particles depth */
+const geo = new THREE.BufferGeometry();
+let pos = [];
+
+for(let i=0;i<2500;i++){
+    pos.push(
+        (Math.random()-0.5)*12,
+        (Math.random()-0.5)*12,
+        (Math.random()-0.5)*12
+    );
+}
+
+geo.setAttribute("position", new THREE.Float32BufferAttribute(pos,3));
+
+const mat = new THREE.PointsMaterial({
+    size: 0.015,
+    color: 0xffffff
+});
+
+const particles = new THREE.Points(geo, mat);
+scene.add(particles);
+
+/* =========================
+   🖱️ cursor glow
+========================= */
+
+const cursor = document.getElementById("cursor");
+
+document.addEventListener("mousemove",(e)=>{
+    cursor.style.left = e.clientX + "px";
+    cursor.style.top = e.clientY + "px";
+});
+
+/* =========================
+   🎬 animation loop
+========================= */
+
+function animate(){
+    requestAnimationFrame(animate);
+
+    object.rotation.y += 0.003;
+    object.rotation.x += 0.002;
+
+    particles.rotation.y += 0.0004;
+
+    renderer.render(scene,camera);
+}
+
+animate();
+
+/* resize */
+window.addEventListener("resize",()=>{
+    renderer.setSize(innerWidth,innerHeight);
+    camera.aspect = innerWidth/innerHeight;
+    camera.updateProjectionMatrix();
+});
+
+/* =========================
+   🎬 SCROLL STORY (Apple style)
+========================= */
+
+gsap.registerPlugin(ScrollTrigger);
+
+gsap.to(object.rotation, {
+    y: Math.PI * 2,
+    scrollTrigger: {
+        trigger: "body",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: true
+    }
+});
+
+gsap.utils.toArray("section").forEach(sec=>{
+    gsap.from(sec,{
+        opacity:0,
+        y:100,
+        duration:1,
+        scrollTrigger:{
+            trigger:sec,
+            start:"top 80%",
+            toggleActions:"play none none reverse"
+        }
+    });
+});
+
+</script>
+
+</body>
+</html>
