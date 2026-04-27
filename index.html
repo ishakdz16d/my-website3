@@ -3,30 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>موقعي الفضائي</title>
+<title>Developer Space</title>
 
 <style>
 body {
   margin: 0;
   overflow: hidden;
   font-family: Arial;
+  background: black;
   color: white;
-
-  background: radial-gradient(circle at top,
-    #1a1a40 0%,
-    #0a0a1f 50%,
-    #000 100%);
-}
-
-/* 🌌 مجرة خفيفة */
-.galaxy {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: url("https://i.imgur.com/3e5YL4X.png");
-  background-size: cover;
-  opacity: 0.25;
-  z-index: -2;
 }
 
 /* النجوم */
@@ -37,7 +22,7 @@ canvas {
   z-index: -1;
 }
 
-/* المحتوى */
+/* الواجهة */
 .content {
   height: 100vh;
   display: flex;
@@ -48,127 +33,136 @@ canvas {
   padding: 20px;
 }
 
-h1 {
-  font-size: 42px;
+/* بطاقة المبرمج */
+.card {
+  background: rgba(255,255,255,0.06);
+  padding: 20px;
+  border-radius: 20px;
+  backdrop-filter: blur(8px);
+  width: 90%;
+  max-width: 380px;
+  margin-top: 15px;
+  border: 1px solid rgba(255,255,255,0.2);
 }
 
-p {
+h1 {
+  font-size: 38px;
+}
+
+.sub {
   opacity: 0.8;
 }
 
-/* زر */
-.main-btn {
-  margin-top: 15px;
-  padding: 12px 20px;
+/* أزرار */
+button {
+  margin-top: 10px;
+  padding: 10px 15px;
   border: none;
   border-radius: 12px;
   background: #00c2ff;
   color: white;
-  font-size: 16px;
   cursor: pointer;
+}
+
+/* مهارات */
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.skill {
+  background: rgba(0,194,255,0.2);
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 12px;
 }
 
 /* روابط */
 .social {
-  margin-top: 20px;
+  margin-top: 15px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  width: 100%;
-  max-width: 350px;
+  gap: 10px;
 }
 
 .box {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(255,255,255,0.06);
-  padding: 10px;
-  border-radius: 15px;
+  background: rgba(255,255,255,0.05);
+  padding: 8px;
+  border-radius: 12px;
 }
 
 .box img {
-  width: 55px;
-  height: 55px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
-  border: 2px solid white;
 }
 
-.box button {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  border-radius: 10px;
-  background: #111;
-  color: white;
-  cursor: pointer;
-}
-
-/* 📱 الهاتف */
+/* موبايل */
 @media (max-width: 600px) {
-  h1 {
-    font-size: 28px;
-  }
-
-  .main-btn {
-    width: 80%;
-    font-size: 14px;
-  }
-
-  .box {
-    flex-direction: row;
-  }
-}
-
-/* 💻 الكمبيوتر */
-@media (min-width: 1000px) {
-  h1 {
-    font-size: 50px;
-  }
-
-  .social {
-    max-width: 420px;
-  }
+  h1 { font-size: 28px; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="galaxy"></div>
 <canvas id="sky"></canvas>
 
 <div class="content">
 
-<h1>✨ سماء هادئة</h1>
-<p>يعمل على الهاتف والكمبيوتر</p>
+<h1>👨‍💻 مبرمج فضائي</h1>
+<p class="sub">Developer | Coder | Explorer</p>
 
-<button class="main-btn" onclick="toggleMusic()">▶ تشغيل الموسيقى</button>
+<button onclick="toggleMusic()">▶ تشغيل الموسيقى</button>
 
+<!-- بطاقة -->
+<div class="card">
+
+  <p>🔥 عني:</p>
+  <p class="sub">مبرمج يحب بناء مواقع وتطبيقات داخل عوالم خيالية</p>
+
+  <p>⚡ المهارات:</p>
+  <div class="skills">
+    <div class="skill">HTML</div>
+    <div class="skill">CSS</div>
+    <div class="skill">JavaScript</div>
+    <div class="skill">GitHub</div>
+    <div class="skill">Frontend</div>
+  </div>
+
+</div>
+
+<!-- روابط -->
 <div class="social">
 
   <div class="box">
     <img src="https://placekitten.com/80/80">
-    <button onclick="openDiscord()">💬 Discord: is7_9</button>
+    <button onclick="openDiscord()">💬 is7_9</button>
   </div>
 
   <div class="box">
     <img src="https://placekitten.com/81/81">
-    <button onclick="openInstagram()">📸 Instagram: dz16d</button>
+    <button onclick="openInstagram()">📸 dz16d</button>
   </div>
 
 </div>
 
 </div>
 
-<!-- 🎵 موسيقى -->
+<!-- موسيقى -->
 <audio id="music" loop>
   <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_9b3b3b7f3a.mp3">
 </audio>
 
 <script>
 
-/* 🎵 موسيقى */
+/* موسيقى */
 const music = document.getElementById("music");
 let playing = false;
 
@@ -182,7 +176,7 @@ function toggleMusic() {
   }
 }
 
-/* 🔗 روابط */
+/* روابط */
 function openDiscord() {
   window.open("https://discord.com/users/is7_9", "_blank");
 }
@@ -191,21 +185,16 @@ function openInstagram() {
   window.open("https://instagram.com/dz16d", "_blank");
 }
 
-/* 🌌 نجوم */
+/* نجوم */
 const canvas = document.getElementById("sky");
 const ctx = canvas.getContext("2d");
 
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener("resize", resize);
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
 let stars = [];
 let shooting = [];
 
-/* نجوم */
 for (let i = 0; i < 180; i++) {
   stars.push({
     x: Math.random() * window.innerWidth,
@@ -214,22 +203,20 @@ for (let i = 0; i < 180; i++) {
   });
 }
 
-/* شهب */
-function createShooting() {
+function createShoot() {
   shooting.push({
     x: Math.random() * window.innerWidth,
     y: Math.random() * window.innerHeight / 2,
     len: 70,
-    speed: 6 + Math.random() * 4
+    speed: 6
   });
 }
 
-setInterval(createShooting, 3000);
+setInterval(createShoot, 3000);
 
 function draw() {
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  /* نجوم */
   ctx.fillStyle = "white";
   for (let s of stars) {
     ctx.beginPath();
@@ -237,7 +224,6 @@ function draw() {
     ctx.fill();
   }
 
-  /* شهب */
   for (let i = 0; i < shooting.length; i++) {
     let s = shooting[i];
 
@@ -250,7 +236,7 @@ function draw() {
     s.x += s.speed;
     s.y += s.speed;
 
-    if (s.x > canvas.width || s.y > canvas.height) {
+    if (s.x > canvas.width) {
       shooting.splice(i,1);
     }
   }
@@ -262,6 +248,11 @@ function animate() {
 }
 
 animate();
+
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
 
 </script>
 
