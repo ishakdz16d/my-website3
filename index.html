@@ -3,299 +3,252 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Space Game PRO MAX</title>
+<title>Is7aq Full Site</title>
 
 <style>
 body {
   margin: 0;
   overflow: hidden;
-  background: black;
   font-family: Arial;
+  background: black;
   color: white;
 }
 
-canvas { display: block; }
-
-.hud {
+/* 🌌 الخلفية */
+canvas {
   position: fixed;
-  top: 10px;
-  left: 10px;
-  background: rgba(0,0,0,0.6);
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #00c2ff;
+  top: 0;
+  left: 0;
 }
 
-.shop {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  background: rgba(0,0,0,0.6);
-  padding: 10px;
-  border-radius: 10px;
+/* 🧑‍💻 الكارد */
+.card {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+
+  background: rgba(255,255,255,0.06);
   border: 1px solid #00c2ff;
+  padding: 20px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+  backdrop-filter: blur(10px);
 }
 
 button {
-  margin-top: 5px;
-  padding: 6px;
+  margin-top: 10px;
+  padding: 12px;
+  width: 100%;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   background: #00c2ff;
   color: white;
   cursor: pointer;
+}
+
+/* 🎮 قائمة الألعاب */
+#menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  z-index: 20;
+  text-align: center;
+  padding-top: 80px;
+}
+
+.gameBtn {
+  width: 80%;
+  max-width: 300px;
+  margin: 10px auto;
+  padding: 12px;
+  border-radius: 12px;
+  background: #00c2ff;
+  border: none;
+  color: white;
+}
+
+/* 🎮 اللعبة */
+#game {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 30;
+}
+
+.back {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 40;
+  padding: 10px;
+  background: #00c2ff;
+  border: none;
+  border-radius: 10px;
 }
 </style>
 </head>
 
 <body>
 
+<canvas id="bg"></canvas>
+
+<!-- 🧑‍💻 التعريف -->
+<div class="card">
+  <h2>👨‍💻 اسحاق</h2>
+  <p>🇩🇿 من الجزائر</p>
+  <p>💻 أحب البرمجة وصناعة المواقع</p>
+
+  <button onclick="window.open('https://discord.com','_blank')">💬 Discord</button>
+  <button onclick="window.open('https://instagram.com','_blank')">📸 Instagram</button>
+
+  <button onclick="openMenu()">🎮 الألعاب</button>
+</div>
+
+<!-- 🎮 قائمة الألعاب -->
+<div id="menu">
+  <h2>🎮 قائمة الألعاب</h2>
+
+  <button class="gameBtn" onclick="startGame()">🚀 لعبة الفضاء</button>
+  <button class="gameBtn" onclick="closeMenu()">⬅ رجوع</button>
+</div>
+
+<!-- 🎮 اللعبة -->
 <canvas id="game"></canvas>
-
-<div class="hud">
-⭐ Score: <span id="score">0</span><br>
-💥 Damage: <span id="dmg">1</span><br>
-🔫 Weapon: <span id="w">Normal</span><br>
-👑 Boss HP: <span id="bhp">-</span>
-</div>
-
-<div class="shop">
-🛒 Shop<br>
-<button onclick="upgrade()">Upgrade Damage</button>
-</div>
+<button class="back" onclick="exitGame()">⬅ خروج</button>
 
 <script>
 
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+/* 🌌 نجوم */
+const bg = document.getElementById("bg");
+const ctx = bg.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+bg.width = window.innerWidth;
+bg.height = window.innerHeight;
 
-let shipX = canvas.width/2;
+let stars = [];
 
+for(let i=0;i<120;i++){
+  stars.push({
+    x: Math.random()*bg.width,
+    y: Math.random()*bg.height
+  });
+}
+
+function draw(){
+  ctx.clearRect(0,0,bg.width,bg.height);
+  ctx.fillStyle="white";
+
+  stars.forEach(s=>{
+    ctx.fillRect(s.x,s.y,1.5,1.5);
+  });
+}
+
+setInterval(draw,50);
+
+/* 🎮 menu */
+function openMenu(){
+  document.getElementById("menu").style.display="block";
+}
+function closeMenu(){
+  document.getElementById("menu").style.display="none";
+}
+
+/* 🚀 لعبة */
+const game = document.getElementById("game");
+const g = game.getContext("2d");
+
+game.width = window.innerWidth;
+game.height = window.innerHeight;
+
+let x = game.width/2;
 let bullets = [];
 let enemies = [];
-let boss = null;
 
-let score = 0;
-let damage = 1;
-let weapon = "normal";
-
-/* 🔊 صوت */
-function sound(type){
-  let a = new (window.AudioContext || window.webkitAudioContext)();
-  let o = a.createOscillator();
-  let g = a.createGain();
-
-  o.connect(g);
-  g.connect(a.destination);
-
-  if(type==="laser") o.frequency.value = 800;
-  if(type==="normal") o.frequency.value = 400;
-  if(type==="bomb") o.frequency.value = 200;
-
-  o.start();
-  o.stop(a.currentTime + 0.08);
+function startGame(){
+  document.getElementById("menu").style.display="none";
+  game.style.display="block";
 }
 
-/* 🎯 ترقية */
-function upgrade(){
-  if(score >= 5){
-    score -= 5;
-    damage++;
-  }
+/* خروج */
+function exitGame(){
+  game.style.display="none";
 }
 
-/* التحكم */
-window.addEventListener("mousemove",e=>shipX=e.clientX);
-window.addEventListener("touchmove",e=>shipX=e.touches[0].clientX);
-
-/* سلاح */
-window.addEventListener("keydown",(e)=>{
-  if(e.key==="1") weapon="normal";
-  if(e.key==="2") weapon="laser";
-  if(e.key==="3") weapon="bomb";
-
-  document.getElementById("w").innerText = weapon;
-});
+/* تحكم */
+window.addEventListener("mousemove",e=>x=e.clientX);
+window.addEventListener("touchmove",e=>x=e.touches[0].clientX);
 
 /* إطلاق */
-window.addEventListener("click",shoot);
-window.addEventListener("touchstart",shoot);
-
-function shoot(){
-  bullets.push({
-    x: shipX,
-    y: canvas.height-60,
-    type: weapon
-  });
-
-  sound(weapon);
-}
+window.addEventListener("click",()=>{
+  if(game.style.display==="block"){
+    bullets.push({x:x,y:game.height-60});
+  }
+});
 
 /* أعداء */
-function spawn(){
-  enemies.push({
-    x: Math.random()*canvas.width,
-    y: -20,
-    speed: 2+Math.random()*2
-  });
-}
-setInterval(spawn,700);
+setInterval(()=>{
+  if(game.style.display==="block"){
+    enemies.push({
+      x: Math.random()*game.width,
+      y: 0,
+      speed: 2
+    });
+  }
+},800);
 
-/* 👑 Boss */
-function spawnBoss(){
-  boss = {
-    x: canvas.width/2,
-    y: 120,
-    hp: 30,
-    dir: 1
-  };
-}
-
-/* انفجار */
-let explosions = [];
-function boom(x,y){
-  explosions.push({x,y,r:0});
-}
-
-/* اللعبة */
+/* تحديث */
 function update(){
 
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(game.style.display==="block"){
 
-  /* سفينة */
-  ctx.fillStyle="#00c2ff";
-  ctx.fillRect(shipX,canvas.height-80,30,20);
+    g.clearRect(0,0,game.width,game.height);
 
-  /* bullets */
-  for(let i=0;i<bullets.length;i++){
-    let b = bullets[i];
-    b.y -= 8;
+    /* سفينة */
+    g.fillStyle="#00c2ff";
+    g.fillRect(x,game.height-80,30,20);
 
-    if(b.type==="laser"){
-      ctx.fillStyle="cyan";
-      ctx.fillRect(b.x,b.y,2,20);
-    }
-
-    if(b.type==="normal"){
-      ctx.fillStyle="white";
-      ctx.fillRect(b.x,b.y,3,10);
-    }
-
-    if(b.type==="bomb"){
-      ctx.fillStyle="orange";
-      ctx.beginPath();
-      ctx.arc(b.x,b.y,6,0,Math.PI*2);
-      ctx.fill();
-    }
-
-    if(b.y<0) bullets.splice(i,1);
-  }
-
-  /* enemies */
-  for(let i=0;i<enemies.length;i++){
-    let e = enemies[i];
-    e.y += e.speed;
-
-    ctx.fillStyle="red";
-    ctx.fillRect(e.x,e.y,20,20);
-
-    if(e.y>canvas.height-100 && Math.abs(e.x-shipX)<25){
-      alert("💥 Game Over | Score: "+score);
-      location.reload();
-    }
-
-    for(let j=0;j<bullets.length;j++){
-      let b = bullets[j];
-
-      if(Math.abs(b.x-e.x)<25 && Math.abs(b.y-e.y)<25){
-
-        enemies.splice(i,1);
-        bullets.splice(j,1);
-
-        score += damage;
-        boom(e.x,e.y);
-        sound("normal");
-        break;
-      }
-    }
-
-    if(e.y>canvas.height){
-      enemies.splice(i,1);
-      score++;
-    }
-  }
-
-  /* 👑 Boss (لا يتأثر إلا بالليزر) */
-  if(boss){
-
-    boss.x += boss.dir * 3;
-    if(boss.x<50 || boss.x>canvas.width-50) boss.dir *= -1;
-
-    ctx.fillStyle="purple";
-    ctx.beginPath();
-    ctx.arc(boss.x,boss.y,45,0,Math.PI*2);
-    ctx.fill();
-
+    /* bullets */
     for(let i=0;i<bullets.length;i++){
       let b = bullets[i];
+      b.y -= 6;
 
-      if(Math.abs(b.x-boss.x)<45 && Math.abs(b.y-boss.y)<45){
+      g.fillStyle="white";
+      g.fillRect(b.x,b.y,3,10);
 
-        if(b.type === "laser"){
-          boss.hp -= damage;
-          boom(boss.x,boss.y);
-          sound("laser");
-        }
+      if(b.y<0) bullets.splice(i,1);
+    }
 
-        bullets.splice(i,1);
+    /* enemies */
+    for(let i=0;i<enemies.length;i++){
+      let e = enemies[i];
+      e.y += e.speed;
 
-        if(boss.hp <= 0){
-          boss = null;
-          score += 25;
-        }
+      g.fillStyle="red";
+      g.fillRect(e.x,e.y,20,20);
+
+      if(e.y>160 && Math.abs(e.x-x)<25){
+        alert("💥 Game Over");
+        location.reload();
       }
     }
 
-    document.getElementById("bhp").innerText = boss.hp;
-  } else {
-    document.getElementById("bhp").innerText = "-";
   }
-
-  /* spawn boss */
-  if(score > 15 && !boss){
-    spawnBoss();
-  }
-
-  /* انفجارات */
-  for(let i=0;i<explosions.length;i++){
-    let ex = explosions[i];
-
-    ctx.strokeStyle="rgba(0,194,255,0.7)";
-    ctx.beginPath();
-    ctx.arc(ex.x,ex.y,ex.r,0,Math.PI*2);
-    ctx.stroke();
-
-    ex.r += 3;
-
-    if(ex.r > 30) explosions.splice(i,1);
-  }
-
-  document.getElementById("score").innerText = score;
-  document.getElementById("dmg").innerText = damage;
 
   requestAnimationFrame(update);
 }
 
 update();
-
-/* resize */
-window.addEventListener("resize",()=>{
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
 
 </script>
 
