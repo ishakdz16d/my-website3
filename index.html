@@ -1,104 +1,191 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>موقعي الهادئ</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اسحاق | Portfolio</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-      /* صورة الخلفية */
-      background-image: url("https://chatgpt.com/backend-api/estuary/content?id=file_0000000067e471f5bda57312072725e8");
-      background-size: cover;
-      background-position: center;
-      height: 100vh;
-      overflow: hidden;
-      color: white;
-    }
+<style>
+body{
+    margin:0;
+    font-family:"Cairo", sans-serif;
+    background:#05060a;
+    color:white;
+}
 
-    .overlay {
-      background: rgba(0,0,0,0.65);
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 20px;
-    }
+/* خلفية glow */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+    radial-gradient(circle at 20% 20%, rgba(138,92,255,0.25), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(0,200,255,0.15), transparent 40%);
+    z-index:-1;
+}
 
-    h1 {
-      font-size: 40px;
-      margin-bottom: 10px;
-    }
+/* NAV */
+nav{
+    display:flex;
+    justify-content:space-between;
+    padding:20px 40px;
+}
 
-    p {
-      font-size: 18px;
-      opacity: 0.9;
-    }
+nav a{
+    color:#aaa;
+    margin:0 10px;
+    text-decoration:none;
+}
 
-    button {
-      margin-top: 25px;
-      padding: 12px 28px;
-      font-size: 18px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      background: #00c2ff;
-      color: white;
-      transition: 0.3s;
-    }
+nav a:hover{color:white}
 
-    button:hover {
-      background: #0096c7;
-      transform: scale(1.05);
-    }
+/* HERO */
+.hero{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:40px;
+    flex-wrap:wrap;
+}
 
-    .card {
-      margin-top: 30px;
-      padding: 15px 25px;
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 15px;
-      backdrop-filter: blur(5px);
-    }
-  </style>
+.hero h1{
+    font-size:60px;
+    background:linear-gradient(90deg,#7b61ff,#00d4ff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.hero p{color:#bbb}
+
+/* buttons */
+.btn{
+    padding:10px 15px;
+    border-radius:10px;
+    text-decoration:none;
+}
+
+.primary{
+    background:linear-gradient(90deg,#7b61ff,#00d4ff);
+    color:white;
+}
+
+.secondary{
+    border:1px solid #333;
+    color:white;
+}
+
+/* card */
+.card{
+    width:280px;
+    background:rgba(255,255,255,0.05);
+    padding:20px;
+    border-radius:20px;
+}
+
+.avatar{
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    overflow:hidden;
+    margin:auto;
+}
+
+.avatar img{width:100%}
+
+/* stats */
+.stats{
+    display:flex;
+    justify-content:space-around;
+    padding:30px;
+}
+
+.stat{text-align:center}
+
+/* music */
+.music{
+    position:fixed;
+    bottom:20px;
+    left:20px;
+}
+
+#musicBtn{
+    padding:10px;
+    border-radius:10px;
+    background:#7b61ff;
+    color:white;
+    border:none;
+    cursor:pointer;
+}
+</style>
 </head>
 
 <body>
 
-<div class="overlay">
+<nav>
+<div>
+<a href="#">الرئيسية</a>
+<a href="#">عنّي</a>
+<a href="#">المهارات</a>
+<a href="#">المشاريع</a>
+</div>
+</nav>
 
-  <h1>🌙 مرحبا بك</h1>
-  <p>موقع بسيط مع موسيقى هادئة وخلفية جميلة</p>
+<div class="hero">
 
-  <button onclick="toggleMusic()">▶ تشغيل / إيقاف الموسيقى</button>
+<div>
+<p>👋 مرحباً</p>
+<h1>اسحاق</h1>
+<p>مطور مواقع أتعلم وأبني مشاريع حديثة.</p>
 
-  <div class="card">
-    هذا موقع يمكنك رفعه مباشرة على GitHub Pages 🚀
-  </div>
+<a class="btn primary">تواصل</a>
+<a class="btn secondary">أعمالي</a>
+</div>
+
+<div class="card">
+<div class="avatar">
+<img src="https://cdn.discordapp.com/embed/avatars/0.png">
+</div>
+
+<h3 style="text-align:center;">اسحاق</h3>
+
+<p style="text-align:center;color:#aaa;">مطور مبتدئ</p>
+</div>
 
 </div>
 
-<!-- موسيقى هادئة -->
-<audio id="music" loop>
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9b3b3b7f3a.mp3?filename=calm-lofi-ambient-112191.mp3" type="audio/mpeg">
+<div class="stats">
+<div class="stat"><h2>10+</h2><p>مشاريع</p></div>
+<div class="stat"><h2>200+</h2><p>ساعة</p></div>
+<div class="stat"><h2>1+</h2><p>سنة</p></div>
+</div>
+
+<!-- 🎵 MUSIC -->
+<div class="music">
+<button id="musicBtn">🎵 تشغيل</button>
+</div>
+
+<audio id="audio" loop>
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a3d6b5.mp3?filename=ambient-piano-amp-strings-10711.mp3" type="audio/mp3">
 </audio>
 
 <script>
-  const music = document.getElementById("music");
-  let playing = false;
+const audio = document.getElementById("audio");
+const btn = document.getElementById("musicBtn");
 
-  function toggleMusic() {
-    if (!playing) {
-      music.play();
-      playing = true;
-    } else {
-      music.pause();
-      playing = false;
-    }
-  }
+let play=false;
+
+btn.onclick=()=>{
+if(!play){
+audio.play();
+btn.innerText="⏸ إيقاف";
+}else{
+audio.pause();
+btn.innerText="🎵 تشغيل";
+}
+play=!play;
+}
 </script>
 
 </body>
