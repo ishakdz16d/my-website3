@@ -3,25 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Is7aq Space Site</title>
+<title>Is7aq Ultimate Space Site</title>
 
 <style>
 body{
 margin:0;
 font-family:Arial;
 background:black;
-color:white;
 overflow:hidden;
+color:white;
 }
 
-/* 🌌 background */
+/* 🌌 stars */
 canvas{
 position:fixed;
 top:0;
 left:0;
 }
 
-/* 🧑‍💻 card */
+/* 🧑‍💻 MAIN CARD */
 .card{
 position:absolute;
 top:50%;
@@ -31,16 +31,36 @@ background:rgba(20,20,40,0.75);
 border:1px solid #00c2ff;
 padding:25px;
 border-radius:20px;
-width:90%;
-max-width:360px;
+width:92%;
+max-width:380px;
 text-align:center;
-backdrop-filter:blur(10px);
-box-shadow:0 0 20px #00c2ff33;
+backdrop-filter:blur(15px);
+box-shadow:0 0 25px #00c2ff33;
 }
 
 h1{
 margin:0;
 color:#00c2ff;
+}
+
+/* 🌐 socials */
+.social{
+display:flex;
+flex-direction:column;
+gap:8px;
+margin-top:10px;
+}
+
+a{
+text-decoration:none;
+color:white;
+}
+
+.link{
+padding:10px;
+border-radius:10px;
+border:1px solid #00c2ff;
+background:rgba(255,255,255,0.05);
 }
 
 /* buttons */
@@ -50,35 +70,10 @@ margin-top:10px;
 padding:12px;
 border:none;
 border-radius:12px;
-background:linear-gradient(90deg,#00c2ff,#0077ff);
+background:linear-gradient(90deg,#00c2ff,#0055ff);
 color:white;
 font-weight:bold;
 cursor:pointer;
-}
-
-button:hover{
-transform:scale(1.05);
-}
-
-/* 🌐 socials */
-.social{
-margin-top:10px;
-display:flex;
-flex-direction:column;
-gap:8px;
-}
-
-a{
-text-decoration:none;
-}
-
-.link{
-display:block;
-padding:10px;
-border-radius:10px;
-background:rgba(255,255,255,0.08);
-border:1px solid #00c2ff;
-color:white;
 }
 
 /* HUD */
@@ -91,6 +86,19 @@ padding:10px;
 border:1px solid #00c2ff;
 border-radius:10px;
 display:none;
+}
+
+/* SHOP */
+.shop{
+position:fixed;
+right:10px;
+top:10px;
+background:rgba(0,0,0,0.5);
+border:1px solid #00c2ff;
+padding:10px;
+border-radius:10px;
+display:none;
+width:140px;
 }
 
 /* GAME */
@@ -111,10 +119,9 @@ height:100%;
 
 <!-- 🧑‍💻 PROFILE -->
 <div class="card" id="menu">
-
 <h1>👨‍💻 Is7aq</h1>
 <p>🇩🇿 Developer from Algeria</p>
-<p>💻 Web & Game Creator</p>
+<p>🚀 Space & Web Creator</p>
 
 <!-- 🌐 SOCIAL -->
 <div class="social">
@@ -123,8 +130,7 @@ height:100%;
 <a class="link" href="https://github.com" target="_blank">💻 GitHub</a>
 </div>
 
-<button onclick="startGame()">🚀 تشغيل لعبة الفضاء</button>
-
+<button onclick="startGame()">🚀 دخول اللعبة</button>
 </div>
 
 <!-- HUD -->
@@ -133,12 +139,18 @@ height:100%;
 🔫 Power: <span id="power">1</span>
 </div>
 
+<!-- SHOP -->
+<div class="shop" id="shop">
+🛒 Shop<br>
+<button onclick="buyPower()">+ Power (10⭐)</button>
+</div>
+
 <!-- GAME -->
 <canvas id="game"></canvas>
 
 <script>
 
-/* 🌌 STARS */
+/* 🌌 STAR BACKGROUND */
 const bg=document.getElementById("bg");
 const bctx=bg.getContext("2d");
 
@@ -146,13 +158,14 @@ bg.width=innerWidth;
 bg.height=innerHeight;
 
 let stars=[];
-for(let i=0;i<150;i++){
+for(let i=0;i<200;i++){
 stars.push({x:Math.random()*bg.width,y:Math.random()*bg.height});
 }
 
 function drawBg(){
 bctx.clearRect(0,0,bg.width,bg.height);
 bctx.fillStyle="white";
+
 for(let s of stars){
 s.y+=0.4;
 if(s.y>bg.height)s.y=0;
@@ -168,11 +181,11 @@ const g=c.getContext("2d");
 c.width=innerWidth;
 c.height=innerHeight;
 
-/* PLAYER */
-let ship={x:c.width/2,y:c.height-120};
+let ship={x:c.width/2,y:c.height-120,hp:100};
 
 let bullets=[];
 let enemies=[];
+let boss=null;
 
 let score=0;
 let power=1;
@@ -181,6 +194,7 @@ let power=1;
 function startGame(){
 document.getElementById("menu").style.display="none";
 document.getElementById("hud").style.display="block";
+document.getElementById("shop").style.display="block";
 c.style.display="block";
 }
 
@@ -202,10 +216,30 @@ if(c.style.display==="block"){
 enemies.push({
 x:Math.random()*c.width,
 y:-20,
-s:2+Math.random()*2
+s:2+Math.random()*2,
+type:Math.floor(Math.random()*3)
 });
 }
-},700);
+},600);
+
+/* BOSS */
+setTimeout(()=>{
+boss={x:c.width/2,y:80,hp:60};
+},15000);
+
+/* SHOP */
+function buyPower(){
+if(score>=10){
+score-=10;
+power++;
+update();
+}
+}
+
+function update(){
+document.getElementById("score").innerText=score;
+document.getElementById("power").innerText=power;
+}
 
 /* LOOP */
 function loop(){
@@ -236,7 +270,11 @@ for(let i=enemies.length-1;i>=0;i--){
 let e=enemies[i];
 e.y+=e.s;
 
-g.fillStyle="red";
+/* shapes */
+if(e.type===0)g.fillStyle="red";
+if(e.type===1)g.fillStyle="orange";
+if(e.type===2)g.fillStyle="purple";
+
 g.fillRect(e.x,e.y,20,20);
 
 /* hit */
@@ -249,22 +287,40 @@ enemies.splice(i,1);
 bullets.splice(j,1);
 
 score++;
-document.getElementById("score").innerText=score;
-
-/* power upgrade */
-if(score % 10 === 0){
-power++;
-document.getElementById("power").innerText=power;
-}
-
+update();
 break;
 }
 }
 
-/* game over */
-if(e.y>c.height-100 && Math.abs(e.x-ship.x)<20){
+/* player hit */
+if(e.y>ship.y && Math.abs(e.x-ship.x)<20){
+ship.hp-=10;
+if(ship.hp<=0){
 alert("💥 Game Over | Score: "+score);
 location.reload();
+}
+}
+}
+
+/* 👑 BOSS */
+if(boss){
+
+g.fillStyle="purple";
+g.fillRect(boss.x,boss.y,90,40);
+
+for(let j=bullets.length-1;j>=0;j--){
+let b=bullets[j];
+
+if(b.x>boss.x && b.x<boss.x+90 && b.y<boss.y+40){
+boss.hp--;
+bullets.splice(j,1);
+
+if(boss.hp<=0){
+score+=20;
+update();
+boss=null;
+}
+}
 }
 }
 
