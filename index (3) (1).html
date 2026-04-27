@@ -4,41 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>اسحاق | Portfolio PRO</title>
+<title>اسحاق | Portfolio</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-:root{
---bg:#070A12;
---card:rgba(255,255,255,0.06);
---text:#fff;
---main:#7c3aed;
---blue:#60a5fa;
-}
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Cairo',sans-serif;
-}
-
 body{
-background:var(--bg);
-color:var(--text);
+margin:0;
+font-family:'Cairo',sans-serif;
+background:#070A12;
+color:#fff;
 overflow-x:hidden;
 }
 
 /* glow */
 .glow{
 position:fixed;
-width:600px;
-height:600px;
-background:radial-gradient(circle,var(--main),transparent 60%);
-top:-200px;
-right:-200px;
-filter:blur(90px);
+width:500px;
+height:500px;
+background:radial-gradient(circle,#7c3aed,transparent 60%);
+top:-150px;
+right:-150px;
+filter:blur(80px);
 opacity:0.7;
 }
 
@@ -47,29 +34,28 @@ nav{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:20px 60px;
+padding:20px 50px;
 }
 
 nav ul{
 display:flex;
-gap:25px;
+gap:20px;
 list-style:none;
-opacity:0.8;
 font-size:14px;
+opacity:0.8;
 }
 
 nav ul li:hover{
-color:var(--main);
+color:#7c3aed;
 cursor:pointer;
 }
 
-/* BUTTON */
 .btn{
-background:linear-gradient(135deg,var(--main),#4f46e5);
-padding:10px 16px;
-border-radius:12px;
+background:linear-gradient(135deg,#7c3aed,#4f46e5);
 border:none;
-color:#fff;
+padding:10px 15px;
+border-radius:10px;
+color:white;
 cursor:pointer;
 }
 
@@ -77,18 +63,18 @@ cursor:pointer;
 .hero{
 display:grid;
 grid-template-columns:1.3fr 0.7fr;
+padding:60px;
 align-items:center;
-padding:50px 70px;
 gap:20px;
 }
 
 .hero h1{
-font-size:55px;
+font-size:50px;
 line-height:1.2;
 }
 
 .hero h1 span{
-background:linear-gradient(90deg,var(--main),var(--blue));
+background:linear-gradient(90deg,#7c3aed,#60a5fa);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
@@ -98,29 +84,21 @@ opacity:0.7;
 margin-top:10px;
 }
 
-/* LEFT CARD */
+/* CARD */
 .card{
-background:var(--card);
-padding:25px;
-border-radius:25px;
-text-align:center;
-backdrop-filter:blur(12px);
+background:rgba(255,255,255,0.05);
 border:1px solid rgba(255,255,255,0.08);
-box-shadow:0 0 30px rgba(124,58,237,0.15);
+padding:20px;
+border-radius:20px;
+text-align:center;
+backdrop-filter:blur(10px);
 }
 
 .avatar{
-width:130px;
-height:130px;
+width:120px;
+height:120px;
 border-radius:50%;
-border:3px solid var(--main);
-object-fit:cover;
-}
-
-.status{
-margin-top:10px;
-opacity:0.8;
-font-size:13px;
+border:3px solid #7c3aed;
 }
 
 /* SOCIAL */
@@ -128,16 +106,16 @@ font-size:13px;
 margin-top:15px;
 display:flex;
 flex-direction:column;
-gap:10px;
+gap:8px;
 }
 
 .social div{
 background:rgba(255,255,255,0.05);
 padding:10px;
-border-radius:12px;
-font-size:13px;
+border-radius:10px;
 display:flex;
 justify-content:space-between;
+font-size:13px;
 }
 
 /* STATS */
@@ -145,19 +123,19 @@ justify-content:space-between;
 display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:15px;
-padding:30px 70px;
+padding:30px 60px;
 }
 
 .stat{
-background:var(--card);
-padding:20px;
-border-radius:18px;
-text-align:center;
+background:rgba(255,255,255,0.05);
 border:1px solid rgba(255,255,255,0.08);
+padding:20px;
+border-radius:15px;
+text-align:center;
 }
 
 .stat h2{
-color:var(--main);
+color:#7c3aed;
 }
 
 /* ABOUT */
@@ -165,41 +143,29 @@ color:var(--main);
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:30px;
-padding:60px 70px;
+padding:60px;
 align-items:center;
 }
 
 .about img{
 width:100%;
-border-radius:20px;
+border-radius:15px;
 }
 
 /* SKILLS */
 .skills{
 display:grid;
 grid-template-columns:repeat(5,1fr);
-gap:15px;
-padding:40px 70px;
+gap:10px;
+padding:40px 60px;
 }
 
 .skill{
-background:var(--card);
+background:rgba(255,255,255,0.05);
 padding:15px;
-border-radius:15px;
+border-radius:12px;
 text-align:center;
-}
-
-.bar{
-height:5px;
-background:#1f2937;
-border-radius:10px;
-overflow:hidden;
-margin-top:8px;
-}
-
-.bar div{
-height:100%;
-background:linear-gradient(90deg,var(--main),var(--blue));
+font-size:14px;
 }
 
 /* RESPONSIVE */
@@ -207,8 +173,8 @@ background:linear-gradient(90deg,var(--main),var(--blue));
 .hero,.about{grid-template-columns:1fr;}
 .stats,.skills{grid-template-columns:1fr 1fr;}
 nav{padding:20px;}
-.hero{padding:20px;}
-.hero h1{font-size:38px;}
+.hero{padding:30px;}
+.hero h1{font-size:35px;}
 }
 </style>
 </head>
@@ -225,23 +191,23 @@ nav{padding:20px;}
 <li>المشاريع</li>
 <li>تواصل</li>
 </ul>
-<button class="btn">تواصل</button>
+<button class="btn">تواصل معي</button>
 </nav>
 
 <section class="hero">
 
 <div>
 <h1>مرحباً 👋 أنا <span>اسحاق</span></h1>
-<p>مطور مواقع ومصمم واجهات حديثة احترافية</p>
+<p>مطور واجهات حديثة وتصميم مواقع احترافية</p>
 <br>
 <button class="btn">مشاريعي</button>
 </div>
 
 <div class="card">
-<img class="avatar" src="https://via.placeholder.com/130">
+<img class="avatar" src="https://via.placeholder.com/120">
 
-<h2>اسحاق</h2>
-<p class="status">Frontend Developer</p>
+<h3>اسحاق</h3>
+<p>Frontend Developer</p>
 
 <div class="social">
 <div><span>Discord</span><span>is7_9</span></div>
@@ -253,27 +219,10 @@ nav{padding:20px;}
 </section>
 
 <section class="stats">
-
-<div class="stat">
-<h2>10+</h2>
-<p>مشاريع</p>
-</div>
-
-<div class="stat">
-<h2>200+</h2>
-<p>ساعات</p>
-</div>
-
-<div class="stat">
-<h2>1+</h2>
-<p>سنة خبرة</p>
-</div>
-
-<div class="stat">
-<h2>100%</h2>
-<p>شغف</p>
-</div>
-
+<div class="stat"><h2>10+</h2><p>مشاريع</p></div>
+<div class="stat"><h2>200+</h2><p>ساعات</p></div>
+<div class="stat"><h2>1+</h2><p>سنة خبرة</p></div>
+<div class="stat"><h2>100%</h2><p>شغف</p></div>
 </section>
 
 <section class="about">
@@ -281,23 +230,4 @@ nav{padding:20px;}
 <div>
 <h2>من أنا؟</h2>
 <p>
-أنا مطور واجهات أعمل على بناء مواقع حديثة، سريعة واحترافية بتجربة مستخدم قوية وتصميم عصري.
-</p>
-</div>
-
-<img src="https://via.placeholder.com/500x300">
-
-</section>
-
-<section class="skills">
-
-<div class="skill">HTML<div class="bar"><div style="width:90%"></div></div></div>
-<div class="skill">CSS<div class="bar"><div style="width:85%"></div></div></div>
-<div class="skill">JS<div class="bar"><div style="width:70%"></div></div></div>
-<div class="skill">Git<div class="bar"><div style="width:75%"></div></div></div>
-<div class="skill">Responsive<div class="bar"><div style="width:90%"></div></div></div>
-
-</section>
-
-</body>
-</html>
+أنا مطور مواقع أصمم واجهات حديثة وسريعة وتجربة مستخد
