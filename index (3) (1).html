@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>اسحاق | Portfolio</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -19,7 +20,6 @@ body{
 background:#05060a;
 color:#fff;
 overflow-x:hidden;
-scroll-behavior:smooth;
 }
 
 /* الخلفية */
@@ -63,9 +63,9 @@ background:linear-gradient(135deg,#7c3aed,#4f46e5);
 padding:10px 18px;
 border-radius:12px;
 font-size:14px;
-cursor:pointer;
 border:none;
 color:#fff;
+cursor:pointer;
 }
 
 /* HERO */
@@ -79,7 +79,7 @@ z-index:2;
 }
 
 .hero h1{
-font-size:60px;
+font-size:55px;
 font-weight:800;
 line-height:1.2;
 }
@@ -115,11 +115,10 @@ cursor:pointer;
 .card{
 background:rgba(255,255,255,0.05);
 border:1px solid rgba(255,255,255,0.08);
-backdrop-filter:blur(12px);
+backdrop-filter:blur(10px);
 border-radius:25px;
 padding:25px;
 text-align:center;
-box-shadow:0 0 40px rgba(124,58,237,0.15);
 }
 
 .profile-img{
@@ -128,7 +127,6 @@ height:140px;
 border-radius:50%;
 border:3px solid #7c3aed;
 object-fit:cover;
-box-shadow:0 0 20px rgba(124,58,237,0.5);
 }
 
 .status{
@@ -144,22 +142,6 @@ background:#22c55e;
 border-radius:50%;
 display:inline-block;
 margin-left:5px;
-}
-
-.social{
-margin-top:20px;
-display:flex;
-flex-direction:column;
-gap:10px;
-}
-
-.social div{
-display:flex;
-justify-content:space-between;
-background:rgba(255,255,255,0.06);
-padding:10px;
-border-radius:12px;
-font-size:13px;
 }
 
 /* STATS */
@@ -187,11 +169,6 @@ grid-template-columns:1fr 1fr;
 gap:30px;
 padding:60px 70px;
 align-items:center;
-}
-
-.about img{
-width:100%;
-border-radius:20px;
 }
 
 /* SKILLS */
@@ -223,17 +200,13 @@ height:100%;
 background:linear-gradient(90deg,#7c3aed,#60a5fa);
 }
 
-/* MUSIC (hidden UI) */
-.music{
-display:none;
-}
-
 /* RESPONSIVE */
 @media(max-width:900px){
 .hero,.about{grid-template-columns:1fr;}
 .stats,.skills{grid-template-columns:1fr 1fr;}
 nav{padding:20px;}
 .hero{padding:20px;}
+.hero h1{font-size:40px;}
 }
 </style>
 </head>
@@ -253,7 +226,7 @@ nav{padding:20px;}
 <button class="btn">تواصل معي</button>
 </nav>
 
-<section class="hero" id="home">
+<section class="hero">
 
 <div>
 <h1>مرحباً 👋 أنا <span>اسحاق</span></h1>
@@ -266,15 +239,10 @@ nav{padding:20px;}
 </div>
 
 <div class="card">
-<img class="profile-img" src="https://cdn.discordapp.com/avatars/1200879352875864134/f8dcf7c4b6cef83644eb44beed2fabf3.webp?size=256" alt="اسحاق">
+<img class="profile-img" src="https://via.placeholder.com/140" alt="profile">
 
 <h3 style="margin-top:10px;">اسحاق</h3>
 <div class="status">Frontend Developer <span class="dot"></span></div>
-
-<div class="social">
-<div><span>Discord</span><span>is7_9</span></div>
-<div><span>Instagram</span><span>dz16d</span></div>
-</div>
 </div>
 
 </section>
@@ -289,34 +257,21 @@ nav{padding:20px;}
 <section class="about">
 <div>
 <h2>من أنا؟</h2>
-<p>مطوّر واجهات متخصص في بناء مواقع حديثة سريعة ومتجاوبة بتصميم احترافي وتجربة مستخدم عالية.</p>
+<p>مطوّر واجهات متخصص في بناء مواقع حديثة سريعة ومتجاوبة بتصميم احترافي.</p>
 </div>
 
-<img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" alt="about">
+<img src="https://via.placeholder.com/400x300" alt="about">
 </section>
 
 <section class="skills">
+
 <div class="skill">HTML<div class="skill-bar"><div style="width:90%"></div></div></div>
 <div class="skill">CSS<div class="skill-bar"><div style="width:85%"></div></div></div>
 <div class="skill">JS<div class="skill-bar"><div style="width:70%"></div></div></div>
 <div class="skill">Git<div class="skill-bar"><div style="width:75%"></div></div></div>
 <div class="skill">Responsive<div class="skill-bar"><div style="width:90%"></div></div></div>
+
 </section>
-
-<!-- موسيقى هادئة بدون زر -->
-<audio id="bg" loop>
-<source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_c8b3d3d2d1.mp3">
-</audio>
-
-<script>
-// تشغيل الموسيقى بعد أول تفاعل (قانون المتصفح)
-const audio = document.getElementById("bg");
-audio.volume = 0.2;
-
-document.body.addEventListener("click", () => {
-audio.play();
-}, { once: true });
-</script>
 
 </body>
 </html>
