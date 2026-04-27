@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IS7AQ SPACE - FINAL</title>
+<title>IS7AQ SPACE GAME</title>
 
 <style>
 body{
@@ -21,44 +21,44 @@ top:0;
 left:0;
 }
 
-/* 🧑‍💻 PROFILE */
-.card{
+/* 🧑‍💻 MENU */
+.menu{
 position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-background:rgba(20,20,40,0.8);
-border:1px solid #00c2ff;
-padding:25px;
-border-radius:20px;
-width:92%;
-max-width:380px;
+top:0;
+left:0;
+width:100%;
+height:100%;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background:radial-gradient(circle,#0a0a2a,#000);
 text-align:center;
-backdrop-filter:blur(10px);
+z-index:10;
 }
 
 h1{
 color:#00c2ff;
-margin:0;
+text-shadow:0 0 20px #00c2ff;
 }
 
 /* LINKS */
 a{
 display:block;
-margin-top:8px;
+margin:5px;
 padding:10px;
 border:1px solid #00c2ff;
 border-radius:10px;
-color:white;
 text-decoration:none;
+color:white;
+width:200px;
 background:rgba(255,255,255,0.05);
 }
 
 /* BUTTON */
 button{
-width:100%;
-margin-top:10px;
-padding:12px;
+margin-top:15px;
+padding:12px 25px;
 border:none;
 border-radius:12px;
 background:linear-gradient(90deg,#00c2ff,#0044ff);
@@ -77,6 +77,7 @@ padding:10px;
 border:1px solid #00c2ff;
 border-radius:10px;
 display:none;
+z-index:20;
 }
 
 /* GAME OVER */
@@ -89,6 +90,7 @@ justify-content:center;
 align-items:center;
 flex-direction:column;
 background:rgba(0,0,0,0.9);
+z-index:30;
 font-size:30px;
 }
 </style>
@@ -99,25 +101,22 @@ font-size:30px;
 <canvas id="bg"></canvas>
 <canvas id="game"></canvas>
 
-<!-- 🧑‍💻 PROFILE -->
-<div class="card" id="menu">
+<!-- 🧑‍💻 MENU -->
+<div class="menu" id="menu">
 
-<h1>👨‍💻 IS7AQ</h1>
+<h1>🚀 IS7AQ SPACE</h1>
 <p>🇩🇿 Developer from Algeria</p>
-<p>🚀 Space Game + Portfolio</p>
 
-<!-- 🌐 SOCIAL -->
 <a href="https://discord.com" target="_blank">💬 Discord: is7_9</a>
 <a href="https://instagram.com" target="_blank">📸 Instagram: dz16d</a>
 
-<button onclick="startGame()">🚀 Start Game</button>
+<button onclick="startGame()">▶ Start Game</button>
 </div>
 
 <!-- HUD -->
 <div class="hud" id="hud">
 ❤️ HP: <span id="hp">100</span><br>
-⭐ Score: <span id="score">0</span><br>
-🗺️ Level: <span id="level">1</span>
+⭐ Score: <span id="score">0</span>
 </div>
 
 <!-- GAME OVER -->
@@ -128,7 +127,7 @@ font-size:30px;
 
 <script>
 
-/* 🌌 STARS */
+/* 🌌 STAR BACKGROUND */
 const bg=document.getElementById("bg");
 const b=bg.getContext("2d");
 
@@ -145,7 +144,7 @@ b.clearRect(0,0,bg.width,bg.height);
 b.fillStyle="white";
 
 for(let s of stars){
-s.y+=0.4;
+s.y+=0.5;
 if(s.y>bg.height)s.y=0;
 b.fillRect(s.x,s.y,2,2);
 }
@@ -160,27 +159,18 @@ c.width=innerWidth;
 c.height=innerHeight;
 
 /* PLAYER */
-let ship={
-x:c.width/2,
-y:c.height-120,
-hp:100,
-shield:true
-};
+let ship={x:c.width/2,y:c.height-120,hp:100};
 
 let bullets=[];
 let enemies=[];
 let boss=null;
 
 let score=0;
-let level=1;
 
-/* START */
+/* START GAME */
 function startGame(){
 document.getElementById("menu").style.display="none";
 document.getElementById("hud").style.display="block";
-
-/* shield 3 sec */
-setTimeout(()=>ship.shield=false,3000);
 }
 
 /* CONTROL */
@@ -193,38 +183,27 @@ window.addEventListener("click",()=>{
 bullets.push({x:ship.x,y:ship.y});
 });
 
-/* ENEMIES (difficulty increases) */
+/* ✈️ ENEMY FIGHTER JETS */
 setInterval(()=>{
 enemies.push({
 x:Math.random()*c.width,
-y:-20,
-speed:2+level*0.5
+y:-50,
+speed:3,
+type:Math.floor(Math.random()*3)
 });
-},600);
-
-/* LEVEL SYSTEM */
-setInterval(()=>{
-level++;
-document.getElementById("level").innerText=level;
-},20000);
+},500);
 
 /* BOSS */
 setTimeout(()=>{
-boss={x:c.width/2,y:80,hp:80};
+boss={x:c.width/2,y:80,hp:100};
 },15000);
-
-/* HUD UPDATE */
-function update(){
-document.getElementById("hp").innerText=ship.hp;
-document.getElementById("score").innerText=score;
-}
 
 /* LOOP */
 function loop(){
 
 g.clearRect(0,0,c.width,c.height);
 
-/* ship */
+/* 🚀 PLAYER */
 g.fillStyle="#00c2ff";
 g.beginPath();
 g.moveTo(ship.x,ship.y);
@@ -241,35 +220,40 @@ g.fillStyle="white";
 g.fillRect(b.x,b.y,3,10);
 }
 
-/* enemies */
+/* ✈️ ENEMY JETS */
 for(let i=enemies.length-1;i>=0;i--){
 let e=enemies[i];
 e.y+=e.speed;
 
-g.fillStyle="red";
-g.fillRect(e.x,e.y,20,20);
+/* شكل طائرة حربية */
+g.fillStyle = e.type===0 ? "red" : e.type===1 ? "orange" : "purple";
 
-/* hit */
+/* جسم الطائرة */
+g.fillRect(e.x,e.y,30,10);
+
+/* جناحات */
+g.fillRect(e.x+10,e.y-5,10,5);
+g.fillRect(e.x+10,e.y+10,10,5);
+
+/* hit bullets */
 for(let j=bullets.length-1;j>=0;j--){
 let b=bullets[j];
 
-if(Math.abs(b.x-e.x)<20 && Math.abs(b.y-e.y)<20){
+if(Math.abs(b.x-e.x)<25 && Math.abs(b.y-e.y)<20){
+
 enemies.splice(i,1);
 bullets.splice(j,1);
 
 score++;
-update();
+document.getElementById("score").innerText=score;
 break;
 }
 }
 
-/* player hit */
+/* collision player */
 if(e.y>ship.y && Math.abs(e.x-ship.x)<25){
-
-if(!ship.shield){
 ship.hp-=20;
-update();
-}
+document.getElementById("hp").innerText=ship.hp;
 
 if(ship.hp<=0){
 document.getElementById("over").style.display="flex";
@@ -277,11 +261,16 @@ document.getElementById("over").style.display="flex";
 }
 }
 
-/* BOSS */
+/* 👑 BOSS */
 if(boss){
+
 g.fillStyle="purple";
 g.fillRect(boss.x,boss.y,120,50);
 
+/* movement */
+boss.x+=Math.sin(Date.now()/400)*4;
+
+/* hit */
 for(let j=bullets.length-1;j>=0;j--){
 let b=bullets[j];
 
@@ -292,7 +281,7 @@ bullets.splice(j,1);
 if(boss.hp<=0){
 score+=50;
 boss=null;
-update();
+document.getElementById("score").innerText=score;
 }
 }
 }
