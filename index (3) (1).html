@@ -4,11 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>اسحاق | Portfolio</title>
+<title>اسحاق | Portfolio PRO</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
 <style>
+:root{
+--bg:#070A12;
+--card:rgba(255,255,255,0.06);
+--text:#fff;
+--main:#7c3aed;
+--blue:#60a5fa;
+}
+
 *{
 margin:0;
 padding:0;
@@ -17,22 +25,21 @@ font-family:'Cairo',sans-serif;
 }
 
 body{
-background:#05060a;
-color:#fff;
+background:var(--bg);
+color:var(--text);
 overflow-x:hidden;
 }
 
-/* الخلفية */
-.bg-glow{
+/* glow */
+.glow{
 position:fixed;
-top:-200px;
-right:-200px;
 width:600px;
 height:600px;
-background:radial-gradient(circle,#6d28d9,transparent 60%);
-filter:blur(80px);
-opacity:0.8;
-z-index:0;
+background:radial-gradient(circle,var(--main),transparent 60%);
+top:-200px;
+right:-200px;
+filter:blur(90px);
+opacity:0.7;
 }
 
 /* NAV */
@@ -40,29 +47,27 @@ nav{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:20px 50px;
-position:relative;
-z-index:10;
+padding:20px 60px;
 }
 
 nav ul{
 display:flex;
 gap:25px;
 list-style:none;
+opacity:0.8;
 font-size:14px;
-opacity:.8;
 }
 
 nav ul li:hover{
-color:#a78bfa;
+color:var(--main);
 cursor:pointer;
 }
 
+/* BUTTON */
 .btn{
-background:linear-gradient(135deg,#7c3aed,#4f46e5);
-padding:10px 18px;
+background:linear-gradient(135deg,var(--main),#4f46e5);
+padding:10px 16px;
 border-radius:12px;
-font-size:14px;
 border:none;
 color:#fff;
 cursor:pointer;
@@ -71,77 +76,68 @@ cursor:pointer;
 /* HERO */
 .hero{
 display:grid;
-grid-template-columns:1.2fr .8fr;
+grid-template-columns:1.3fr 0.7fr;
 align-items:center;
-padding:40px 70px;
-position:relative;
-z-index:2;
+padding:50px 70px;
+gap:20px;
 }
 
 .hero h1{
 font-size:55px;
-font-weight:800;
 line-height:1.2;
 }
 
 .hero h1 span{
-background:linear-gradient(90deg,#a78bfa,#60a5fa);
+background:linear-gradient(90deg,var(--main),var(--blue));
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
 
 .hero p{
-margin-top:15px;
-opacity:.7;
-font-size:15px;
+opacity:0.7;
+margin-top:10px;
 }
 
-.hero-buttons{
-display:flex;
-gap:15px;
-margin-top:25px;
-}
-
-.btn-outline{
-border:1px solid #7c3aed;
-padding:10px 15px;
-border-radius:12px;
-background:transparent;
-color:#fff;
-cursor:pointer;
-}
-
-/* CARD */
+/* LEFT CARD */
 .card{
-background:rgba(255,255,255,0.05);
-border:1px solid rgba(255,255,255,0.08);
-backdrop-filter:blur(10px);
-border-radius:25px;
+background:var(--card);
 padding:25px;
+border-radius:25px;
 text-align:center;
+backdrop-filter:blur(12px);
+border:1px solid rgba(255,255,255,0.08);
+box-shadow:0 0 30px rgba(124,58,237,0.15);
 }
 
-.profile-img{
-width:140px;
-height:140px;
+.avatar{
+width:130px;
+height:130px;
 border-radius:50%;
-border:3px solid #7c3aed;
+border:3px solid var(--main);
 object-fit:cover;
 }
 
 .status{
 margin-top:10px;
+opacity:0.8;
 font-size:13px;
-color:#a78bfa;
 }
 
-.dot{
-width:10px;
-height:10px;
-background:#22c55e;
-border-radius:50%;
-display:inline-block;
-margin-left:5px;
+/* SOCIAL */
+.social{
+margin-top:15px;
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.social div{
+background:rgba(255,255,255,0.05);
+padding:10px;
+border-radius:12px;
+font-size:13px;
+display:flex;
+justify-content:space-between;
 }
 
 /* STATS */
@@ -153,14 +149,16 @@ padding:30px 70px;
 }
 
 .stat{
-background:rgba(255,255,255,0.05);
-border:1px solid rgba(255,255,255,0.08);
+background:var(--card);
 padding:20px;
 border-radius:18px;
 text-align:center;
+border:1px solid rgba(255,255,255,0.08);
 }
 
-.stat h2{color:#a78bfa;}
+.stat h2{
+color:var(--main);
+}
 
 /* ABOUT */
 .about{
@@ -169,6 +167,11 @@ grid-template-columns:1fr 1fr;
 gap:30px;
 padding:60px 70px;
 align-items:center;
+}
+
+.about img{
+width:100%;
+border-radius:20px;
 }
 
 /* SKILLS */
@@ -180,24 +183,23 @@ padding:40px 70px;
 }
 
 .skill{
-background:rgba(255,255,255,0.05);
+background:var(--card);
 padding:15px;
 border-radius:15px;
 text-align:center;
-border:1px solid rgba(255,255,255,0.08);
 }
 
-.skill-bar{
-height:4px;
+.bar{
+height:5px;
 background:#1f2937;
 border-radius:10px;
-margin-top:10px;
 overflow:hidden;
+margin-top:8px;
 }
 
-.skill-bar div{
+.bar div{
 height:100%;
-background:linear-gradient(90deg,#7c3aed,#60a5fa);
+background:linear-gradient(90deg,var(--main),var(--blue));
 }
 
 /* RESPONSIVE */
@@ -206,14 +208,14 @@ background:linear-gradient(90deg,#7c3aed,#60a5fa);
 .stats,.skills{grid-template-columns:1fr 1fr;}
 nav{padding:20px;}
 .hero{padding:20px;}
-.hero h1{font-size:40px;}
+.hero h1{font-size:38px;}
 }
 </style>
 </head>
 
 <body>
 
-<div class="bg-glow"></div>
+<div class="glow"></div>
 
 <nav>
 <h3>اسحاق</h3>
@@ -223,53 +225,77 @@ nav{padding:20px;}
 <li>المشاريع</li>
 <li>تواصل</li>
 </ul>
-<button class="btn">تواصل معي</button>
+<button class="btn">تواصل</button>
 </nav>
 
 <section class="hero">
 
 <div>
 <h1>مرحباً 👋 أنا <span>اسحاق</span></h1>
-<p>مطوّر مواقع ومصمم واجهات حديثة احترافية</p>
-
-<div class="hero-buttons">
+<p>مطور مواقع ومصمم واجهات حديثة احترافية</p>
+<br>
 <button class="btn">مشاريعي</button>
-<button class="btn-outline">تحميل CV</button>
-</div>
 </div>
 
 <div class="card">
-<img class="profile-img" src="https://via.placeholder.com/140" alt="profile">
+<img class="avatar" src="https://via.placeholder.com/130">
 
-<h3 style="margin-top:10px;">اسحاق</h3>
-<div class="status">Frontend Developer <span class="dot"></span></div>
+<h2>اسحاق</h2>
+<p class="status">Frontend Developer</p>
+
+<div class="social">
+<div><span>Discord</span><span>is7_9</span></div>
+<div><span>Instagram</span><span>dz16d</span></div>
+</div>
+
 </div>
 
 </section>
 
 <section class="stats">
-<div class="stat"><h2>10+</h2><p>مشاريع</p></div>
-<div class="stat"><h2>200+</h2><p>ساعات</p></div>
-<div class="stat"><h2>1+</h2><p>سنة خبرة</p></div>
-<div class="stat"><h2>100%</h2><p>شغف</p></div>
+
+<div class="stat">
+<h2>10+</h2>
+<p>مشاريع</p>
+</div>
+
+<div class="stat">
+<h2>200+</h2>
+<p>ساعات</p>
+</div>
+
+<div class="stat">
+<h2>1+</h2>
+<p>سنة خبرة</p>
+</div>
+
+<div class="stat">
+<h2>100%</h2>
+<p>شغف</p>
+</div>
+
 </section>
 
 <section class="about">
+
 <div>
 <h2>من أنا؟</h2>
-<p>مطوّر واجهات متخصص في بناء مواقع حديثة سريعة ومتجاوبة بتصميم احترافي.</p>
+<p>
+أنا مطور واجهات أعمل على بناء مواقع حديثة، سريعة واحترافية بتجربة مستخدم قوية وتصميم عصري.
+</p>
 </div>
 
-<img src="https://via.placeholder.com/400x300" alt="about">
+<img src="https://via.placeholder.com/500x300">
+
 </section>
 
 <section class="skills">
 
-<div class="skill">HTML<div class="skill-bar"><div style="width:90%"></div></div></div>
-<div class="skill">CSS<div class="skill-bar"><div style="width:85%"></div></div></div>
-<div class="skill">JS<div class="skill-bar"><div style="width:70%"></div></div></div>
-<div class="skill">Git<div class="skill-bar"><div style="width:75%"></div></div></div>
-<div class="skill">Responsive<div class="skill-bar"><div style="width:90%"></div></div></div>
+<div class="skill">HTML<div class="bar"><div style="width:90%"></div></div></div>
+<div class="skill">CSS<div class="bar"><div style="width:85%"></div></div></div>
+<div class="skill">JS<div class="bar"><div style="width:70%"></div></div></div>
+<div class="skill">Git<div class="bar"><div style="width:75%"></div></div></div>
+<div class="skill">Responsive<div class="bar"><div style="width:90%"></div></div></div>
 
 </section>
 
