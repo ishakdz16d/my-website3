@@ -1,151 +1,136 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Is7_9 — Portfolio</title>
+<title>اسحاق | Portfolio</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    background: #000;
-    color: white;
-    overflow-x: hidden;
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+
+body{
+    margin:0;
+    font-family:"Cairo", sans-serif;
+    background:#05060a;
+    color:white;
+    overflow-x:hidden;
 }
 
-/* 🌌 background */
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
+/* glow background */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
     background:
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08), transparent 40%),
-        radial-gradient(circle at 80% 80%, rgba(100,150,255,0.06), transparent 50%);
-    z-index: -2;
+    radial-gradient(circle at 20% 20%, rgba(138,92,255,0.25), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(0,200,255,0.15), transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(255,0,120,0.10), transparent 50%);
+    z-index:-1;
 }
 
-/* 🖱️ cursor */
-#cursor {
-    position: fixed;
-    width: 350px;
-    height: 350px;
-    background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 60%);
-    border-radius: 50%;
-    pointer-events: none;
-    transform: translate(-50%, -50%);
+/* NAVBAR */
+nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 60px;
 }
 
-/* 🧭 layout */
-section {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 0 10vw;
+nav .links a{
+    margin:0 12px;
+    color:#aaa;
+    text-decoration:none;
+    font-size:14px;
+    transition:0.3s;
 }
 
-h1 {
-    font-size: clamp(50px, 7vw, 120px);
-    font-weight: 500;
-    letter-spacing: -3px;
-    margin: 0;
+nav .links a:hover{
+    color:white;
 }
 
-p {
-    max-width: 650px;
-    font-size: 20px;
-    color: rgba(255,255,255,0.6);
-    line-height: 1.6;
-    margin-top: 20px;
+.btn-top{
+    padding:10px 15px;
+    border-radius:12px;
+    border:1px solid #333;
+    background:rgba(255,255,255,0.05);
+    color:white;
 }
 
-/* buttons */
-a {
-    margin-top: 20px;
-    padding: 12px 18px;
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.2);
-    color: white;
-    text-decoration: none;
-    transition: 0.3s;
+/* HERO */
+.hero{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:40px 80px;
+    gap:40px;
 }
 
-a:hover {
-    background: rgba(255,255,255,0.05);
+.hero h1{
+    font-size:70px;
+    margin:0;
+    background:linear-gradient(90deg,#7b61ff,#00d4ff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
 }
-</style>
-</head>
 
-<body>
+.hero p{
+    color:#bbb;
+    max-width:450px;
+    line-height:1.7;
+}
 
-<div id="cursor"></div>
+.buttons{
+    margin-top:20px;
+    display:flex;
+    gap:15px;
+}
 
-<section>
-    <h1 id="title"></h1>
-    <p>Creative Web Developer building immersive digital experiences.</p>
-    <a href="https://github.com/ishakdz16d" target="_blank">GitHub</a>
-</section>
+.btn{
+    padding:12px 18px;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:600;
+}
 
-<section>
-    <h1>About</h1>
-    <p>I focus on clean UI, modern animations, and performance-first web development.</p>
-</section>
+.btn.primary{
+    background:linear-gradient(90deg,#7b61ff,#00d4ff);
+    color:white;
+}
 
-<section>
-    <h1>Projects</h1>
-    <p>Apple-style UI • WebGL scenes • Interactive portfolios</p>
-</section>
+.btn.secondary{
+    border:1px solid #333;
+    color:white;
+}
 
-<section>
-    <h1>Contact</h1>
-    <p>Discord: is7_9</p>
-</section>
+/* PROFILE CARD */
+.card{
+    width:320px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:20px;
+    padding:20px;
+    backdrop-filter:blur(15px);
+}
 
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+.avatar{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    margin:auto;
+    border:3px solid #7b61ff;
+    overflow:hidden;
+}
 
-<script>
+.avatar img{
+    width:100%;
+    height:100%;
+}
 
-/* ✍️ type animation */
-const text = "Is7_9";
-let i = 0;
+.status{
+    text-align:center;
+    margin-top:10px;
+}
 
-(function type(){
-    if(i < text.length){
-        document.getElementById("title").innerHTML += text[i];
-        i++;
-        setTimeout(type,120);
-    }
-})();
-
-/* 🖱️ cursor */
-const cursor = document.getElementById("cursor");
-
-document.addEventListener("mousemove",(e)=>{
-    cursor.style.left = e.clientX + "px";
-    cursor.style.top = e.clientY + "px";
-});
-
-/* 🎬 scroll animation */
-gsap.registerPlugin(ScrollTrigger);
-
-gsap.utils.toArray("section").forEach(sec=>{
-    gsap.from(sec,{
-        opacity:0,
-        y:80,
-        duration:1,
-        scrollTrigger:{
-            trigger:sec,
-            start:"top 80%",
-            toggleActions:"play none none reverse"
-        }
-    });
-});
-
-</script>
-
-</body>
-</html>
+.badge{
+    display:inline-block;
+    padding:5px 1
